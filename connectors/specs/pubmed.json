@@ -1,0 +1,82 @@
+{
+  "service_name": "pubmed",
+  "display_name": "PubMed / NCBI E-utilities",
+  "category": "literature",
+  "integration_mode": "rest_api",
+  "auth_type": "query_params",
+  "auth_scheme": "query_params",
+  "base_url_env": "PUBMED_BASE_URL",
+  "base_url_placeholder": "{$env.PUBMED_BASE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "PUBMED_BASE_URL",
+    "PUBMED_EMAIL",
+    "PUBMED_API_KEY"
+  ],
+  "credential_placeholders": [
+    "PUBMED_API_KEY",
+    "PUBMED_BASE_URL",
+    "PUBMED_EMAIL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "search",
+      "method": "GET",
+      "path": "/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&term=__PUBMED_TERM__",
+      "description": "Search PubMed and return PMIDs."
+    },
+    {
+      "operation_id": "summary",
+      "method": "GET",
+      "path": "/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=__PUBMED_IDS__",
+      "description": "Fetch PubMed summaries by PMID list."
+    },
+    {
+      "operation_id": "fetch_abstracts",
+      "method": "GET",
+      "path": "/entrez/eutils/efetch.fcgi?db=pubmed&retmode=text&rettype=abstract&id=__PUBMED_IDS__",
+      "description": "Fetch abstracts in text form."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "search",
+      "method": "GET",
+      "path": "/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&term=__PUBMED_TERM__",
+      "description": "Search PubMed and return PMIDs."
+    },
+    {
+      "operation_id": "summary",
+      "method": "GET",
+      "path": "/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=__PUBMED_IDS__",
+      "description": "Fetch PubMed summaries by PMID list."
+    },
+    {
+      "operation_id": "fetch_abstracts",
+      "method": "GET",
+      "path": "/entrez/eutils/efetch.fcgi?db=pubmed&retmode=text&rettype=abstract&id=__PUBMED_IDS__",
+      "description": "Fetch abstracts in text form."
+    }
+  ],
+  "input_schema_summary": {
+    "search": {
+      "term": "string"
+    },
+    "summary": {
+      "ids": "comma-separated PMIDs"
+    },
+    "fetch_abstracts": {
+      "ids": "comma-separated PMIDs"
+    }
+  },
+  "output_schema_summary": {
+    "search": "esearchresult JSON",
+    "summary": "esummary JSON",
+    "fetch_abstracts": "plain text abstracts"
+  },
+  "rate_limit_retry_notes": "Optional email/API key improve rate limits. Respect NCBI usage guidance.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "Optional email/API key improve rate limits. Respect NCBI usage guidance.",
+  "docs_reference": "https://www.ncbi.nlm.nih.gov/books/NBK25501/"
+}

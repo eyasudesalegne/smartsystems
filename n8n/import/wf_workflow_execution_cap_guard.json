@@ -1,0 +1,119 @@
+{
+  "name": "wf_workflow_execution_cap_guard",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_workflow_execution_cap_guard checks workflow execution caps before a high-impact workflow runs."
+      },
+      "id": "1ee10aad-568d-499f-bda7-df81249b3313",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f25f1480-556f-454f-98c3-80ebbf4db4b9",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"tenant_id\": \"default\", \"workflow_id\": \"wf_workflow_promotion_pipeline\", \"actor_id\": \"operator\", \"persist\": false, \"metadata_json\": {\"source\": \"n8n_guard\"}}}];"
+      },
+      "id": "ee4ba3cb-1570-4b20-a857-7bf0f0d7732d",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\\/$/, '') + '/workflows/execution/check'}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "5b41f08c-ac16-4feb-86be-1b347e3f637b",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', workflow_id: body.workflow_id, allowed: body.allowed, remaining_executions: body.remaining_executions, retry_after_seconds: body.retry_after_seconds || null, policy: body.policy || {}}}];"
+      },
+      "id": "ae063f25-c5c5-4367-8093-ce42db108b5a",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

@@ -1,0 +1,37 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "release_version": "0.5.0-enterprise-release",
+  "publication_ready": true,
+  "bundle_path": null,
+  "count": 1,
+  "delivered_count": 0,
+  "prepared_count": 1,
+  "blocked_count": 0,
+  "execution_items": [
+    {
+      "channel_name": "manual_bundle_review",
+      "channel_type": "manual_inspection",
+      "execution_mode": "manual_handoff",
+      "status": "dry_run",
+      "dry_run": true,
+      "ready": true,
+      "publication_ready": true,
+      "delivery_ref": "/mnt/data/work/latest/artifacts/release_channel_executions/default_0.5.0-enterprise-release_manual_bundle_review_handoff.json",
+      "output_path": "/mnt/data/work/latest/artifacts/release_channel_executions/default_0.5.0-enterprise-release_manual_bundle_review_handoff.json",
+      "blocking_reasons": [],
+      "steps": [
+        "Generated manual handoff instructions for operator review."
+      ],
+      "metadata_json": {
+        "notes": "Default manual review channel for staged release publication bundles.",
+        "release_version": "0.5.0-enterprise-release",
+        "source": "default",
+        "created_at": "2026-03-21T14:33:39Z"
+      }
+    }
+  ],
+  "next_actions": [
+    "Dry-run execution generated operator-facing artifacts only. Re-run with dry_run=false once the target channels are approved."
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "name": "wf_arxiv_search",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_arxiv_search backend bridge workflow. Review setup notes before running."
+      },
+      "id": "cac12529-047a-57b3-9cef-53c074bc86eb",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b77105a4-8880-55eb-aaae-9ee2b5035739",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\": \"arxiv\", \"operation_id\": \"search\", \"body\": {}, \"query\": {\"ARXIV_QUERY\": \"machine learning medical imaging\"}, \"headers\": {}, \"timeout_seconds\": 30}}];"
+      },
+      "id": "2a5f6d76-bfc6-52fe-b645-dd6022b8a182",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/connectors/execute-live\"}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "f417c26d-3d8b-5f3d-8dde-daf6cd9a0869",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{ok: body.status !== \"error\", status: body.status || \"ok\", service_name: body.service_name || null, operation_id: body.operation_id || null, summary: body.summary || null, pagination: body.pagination || null, result: body.normalized || body.data || body}}];"
+      },
+      "id": "c48597bd-71a6-5c3e-a067-5aa16cfedad7",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

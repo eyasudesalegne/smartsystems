@@ -1,0 +1,521 @@
+{
+  "name": "wf_ingress_telegram_master",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Phase 1 hybrid Telegram ingress."
+      },
+      "id": "fb163b6f-44a0-4c72-aefc-409804ac62b6",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "9ec59a79-6eb8-433d-9d81-e7bad8ba9d6d",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        80
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "__CRED_TELEGRAM_BOT__",
+          "name": "__CRED_TELEGRAM_BOT__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst msg = $json.message || $json.edited_message || {};\nconst from = msg.from || {};\nconst chat = msg.chat || {};\nconst text = typeof msg.text === 'string' ? msg.text.trim() : '';\nconst requestId = (globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2,10)}`);\nlet command = '';\nlet command_args = '';\nif (text.startsWith('/')) {\n  const parts = text.split(/\\s+/);\n  command = parts[0].toLowerCase().replace(/@[^\\s]+$/, '');\n  command_args = text.slice(parts[0].length).trim();\n}\nreturn [{json:{\n  request_id: requestId,\n  requested_at: new Date().toISOString(),\n  tenant_id: 'default',\n  source: 'telegram',\n  channel: 'telegram',\n  user_id: `tg-${from.id || 'unknown'}`,\n  actor_id: `tg-${from.id || 'unknown'}`,\n  username: from.username || '',\n  display_name: [from.first_name || '', from.last_name || ''].join(' ').trim() || from.username || `tg-${from.id || 'unknown'}`,\n  chat_id: `tgchat-${chat.id || ''}`,\n  message_id: String(msg.message_id || ''),\n  raw_text: text,\n  text,\n  is_command: command.startsWith('/'),\n  command,\n  command_args,\n  route: command || 'fallback_chat',\n  domain: command ? 'phase1' : 'fallback',\n  raw_payload: $json\n}}];\n"
+      },
+      "id": "e9a63e59-426d-4e36-9f37-9e4badac40f9",
+      "name": "Normalize Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (s) => String(s ?? '').replace(/'/g, \"''\");\nconst j = $json;\nreturn [{json:{\n  ...j,\n  sql: `INSERT INTO tenants (tenant_id, name) VALUES ('${esc(j.tenant_id)}','${esc(j.tenant_id)}') ON CONFLICT (tenant_id) DO NOTHING;\n        INSERT INTO actors (actor_id, tenant_id, username, display_name, source) VALUES ('${esc(j.actor_id)}','${esc(j.tenant_id)}','${esc(j.username)}','${esc(j.display_name)}','${esc(j.source)}')\n        ON CONFLICT (actor_id) DO UPDATE SET username=EXCLUDED.username, display_name=EXCLUDED.display_name, updated_at=now();\n        SELECT '${esc(j.request_id)}'::text AS request_id, '${esc(j.tenant_id)}'::text AS tenant_id, '${esc(j.actor_id)}'::text AS actor_id,\n               '${esc(j.source)}'::text AS source, '${esc(j.channel)}'::text AS channel, '${esc(j.command)}'::text AS command,\n               '${esc(j.raw_text)}'::text AS raw_text, '${esc(j.command_args)}'::text AS command_args, '${esc(j.display_name)}'::text AS display_name, '${esc(j.chat_id)}'::text AS chat_id;`\n}}];\n"
+      },
+      "id": "3621043c-e36a-4279-b620-bdd1c029d8c1",
+      "name": "Upsert Actor SQL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.sql}}",
+        "options": {}
+      },
+      "id": "53ceefb8-a76f-4a84-a96b-87c4027252bc",
+      "name": "Upsert Actor",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -380,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "__CRED_POSTGRES__",
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (s) => String(s ?? '').replace(/'/g, \"''\");\nconst command = $json.command || 'fallback_chat';\nconst scope = command && command.startsWith('/') ? `command:${command}` : 'command:fallback_chat';\nreturn [{json:{\n  ...$json,\n  sql: `WITH actor_has_role AS (\n          SELECT COUNT(*)::int AS c FROM actor_roles ar WHERE ar.actor_id = '${esc($json.actor_id)}' AND ar.tenant_id='${esc($json.tenant_id)}'\n        ),\n        allowed AS (\n          SELECT EXISTS (\n            SELECT 1\n            FROM actor_roles ar\n            JOIN role_scopes rs ON rs.role_id = ar.role_id\n            JOIN scopes s ON s.scope_id = rs.scope_id\n            WHERE ar.actor_id='${esc($json.actor_id)}' AND ar.tenant_id='${esc($json.tenant_id)}' AND s.scope_name='${esc(scope)}'\n          ) AS via_role,\n          (SELECT c FROM actor_has_role) AS role_count\n        )\n        SELECT '${esc($json.request_id)}'::text AS request_id, '${esc($json.tenant_id)}'::text AS tenant_id, '${esc($json.actor_id)}'::text AS actor_id,\n               '${esc($json.source)}'::text AS source, '${esc($json.channel)}'::text AS channel, '${esc($json.command)}'::text AS command,\n               '${esc($json.raw_text)}'::text AS raw_text, '${esc($json.command_args)}'::text AS command_args, '${esc($json.display_name)}'::text AS display_name,\n               '${esc($json.chat_id)}'::text AS chat_id, '${esc(scope)}'::text AS scope_name,\n               CASE WHEN (SELECT via_role FROM allowed) THEN true\n                    WHEN (SELECT role_count FROM allowed)=0 AND '${esc(command)}' IN ('','/status','/health','/jobs','/note','/remind','/reminders','/researchnote') THEN true\n                    ELSE false END AS allowed;`\n}}];\n"
+      },
+      "id": "34c6b221-84df-4c28-be84-8fc3ee871009",
+      "name": "RBAC SQL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.sql}}",
+        "options": {}
+      },
+      "id": "7b8cb476-0a08-4016-93fa-929c45d758bf",
+      "name": "RBAC Check",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        60,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "__CRED_POSTGRES__",
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (s) => String(s ?? '').replace(/'/g, \"''\");\nreturn [{json:{\n  ...$json,\n  sql: `INSERT INTO audits (request_id, tenant_id, actor_id, source, channel, route, domain, command, decision, status, started_at)\n        VALUES ('${esc($json.request_id)}','${esc($json.tenant_id)}','${esc($json.actor_id)}','${esc($json.source)}','${esc($json.channel)}','${esc($json.route || $json.command || 'fallback_chat')}','${esc($json.domain || 'phase1')}','${esc($json.command)}','pending','started',now())\n        ON CONFLICT (request_id) DO UPDATE SET updated_at = now();\n        SELECT * FROM (VALUES ('${esc($json.request_id)}','${esc($json.tenant_id)}','${esc($json.actor_id)}','${esc($json.source)}','${esc($json.channel)}','${esc($json.command)}','${esc($json.command_args)}','${esc($json.raw_text)}','${esc($json.display_name)}','${esc($json.chat_id)}', ${$json.allowed ? 'true' : 'false'})) AS t(request_id,tenant_id,actor_id,source,channel,command,command_args,raw_text,display_name,chat_id,allowed);`\n}}];\n"
+      },
+      "id": "ef9da285-501a-4d17-84a7-4680dd96e32a",
+      "name": "Audit Start SQL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.sql}}",
+        "options": {}
+      },
+      "id": "2d1c3055-41b6-4661-9843-2de9c007f3cc",
+      "name": "Audit Start",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        500,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "__CRED_POSTGRES__",
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (s) => String(s ?? '').replace(/'/g, \"''\");\nconst j = $json;\nif (!j.allowed) {\n  return [{json:{...j, action:'invalid', status:'error', error_code:'ACCESS_DENIED', response_text:'Access denied for this command.', response_data:{ok:false,error:{code:'ACCESS_DENIED',message:'Access denied'}}}}];\n}\nif (!j.command && j.raw_text) {\n  return [{json:{...j, action:'service', service_path:'/ai/generate', service_method:'POST', service_body:{tenant_id:j.tenant_id, actor_id:j.actor_id, request_id:j.request_id, prompt:j.raw_text, action_type:'fallback_chat', prompt_version:'phase1.fallback.v1'}, ai_used:true}}];\n}\nif (j.command === '/health') {\n  return [{json:{...j, action:'service', service_path:'/ready', service_method:'GET', ai_used:false}}];\n}\nif (j.command === '/researchnote') {\n  const body = j.command_args || j.raw_text.replace(/^\\/researchnote\\s*/,'').trim();\n  return [{json:{...j, action:'service', service_path:'/ingest/note', service_method:'POST', service_body:{tenant_id:j.tenant_id, actor_id:j.actor_id, title:'Research note', body, metadata:{source:j.source,request_id:j.request_id}}, ai_used:false}}];\n}\nif (j.command === '/status') {\n  return [{json:{...j, action:'sql', sql:`SELECT '${esc(j.request_id)}'::text AS request_id, '${esc(j.tenant_id)}'::text AS tenant_id, '${esc(j.actor_id)}'::text AS actor_id, false AS ai_used,\n      (SELECT COUNT(*) FROM notes WHERE tenant_id='${esc(j.tenant_id)}')::int AS notes_count,\n      (SELECT COUNT(*) FROM reminders WHERE tenant_id='${esc(j.tenant_id)}' AND status='pending')::int AS pending_reminders,\n      (SELECT COUNT(*) FROM jobs WHERE tenant_id='${esc(j.tenant_id)}' AND status IN ('queued','running'))::int AS active_jobs;`, mode:'status'}}];\n}\nif (j.command === '/jobs') {\n  return [{json:{...j, action:'sql', sql:`SELECT job_id::text, job_type, status, priority, retry_count, created_at FROM jobs WHERE tenant_id='${esc(j.tenant_id)}' ORDER BY created_at DESC LIMIT 10;`, mode:'jobs'}}];\n}\nif (j.command === '/note') {\n  const body = j.command_args || j.raw_text.replace(/^\\/note\\s*/,'').trim();\n  if (!body) return [{json:{...j, action:'invalid', status:'error', error_code:'MISSING_ARGUMENT', response_text:'Missing note text.', response_data:{ok:false,error:{code:'MISSING_ARGUMENT',message:'Missing note text'}}}}];\n  return [{json:{...j, action:'sql', sql:`INSERT INTO notes (tenant_id, actor_id, body) VALUES ('${esc(j.tenant_id)}','${esc(j.actor_id)}','${esc(body)}') RETURNING note_id::text, body, created_at;`, mode:'note'}}];\n}\nif (j.command === '/reminders') {\n  return [{json:{...j, action:'sql', sql:`SELECT reminder_id::text, task_text, due_at, status, created_at FROM reminders WHERE tenant_id='${esc(j.tenant_id)}' ORDER BY created_at DESC LIMIT 10;`, mode:'reminders'}}];\n}\nif (j.command === '/remind') {\n  const raw = j.command_args || j.raw_text.replace(/^\\/remind\\s*/,'').trim();\n  const parts = raw.split('|');\n  const task = (parts[0] || '').trim();\n  const due = (parts[1] || '').trim();\n  if (!task) return [{json:{...j, action:'invalid', status:'error', error_code:'MISSING_ARGUMENT', response_text:'Missing reminder task.', response_data:{ok:false,error:{code:'MISSING_ARGUMENT',message:'Missing reminder task'}}}}];\n  const dueExpr = due ? `'${esc(due)}'::timestamptz` : 'now()';\n  return [{json:{...j, action:'sql', sql:`WITH r AS (\n      INSERT INTO reminders (tenant_id, actor_id, task_text, due_at) VALUES ('${esc(j.tenant_id)}','${esc(j.actor_id)}','${esc(task)}', ${dueExpr}) RETURNING reminder_id, due_at, task_text\n    ), j AS (\n      INSERT INTO jobs (tenant_id, actor_id, job_type, status, priority, payload, max_retries, scheduled_at)\n      SELECT '${esc(j.tenant_id)}','${esc(j.actor_id)}','deliver_reminder','queued',5,jsonb_build_object('job_type','deliver_reminder','reminder_id', reminder_id::text),3, due_at FROM r RETURNING job_id\n    )\n    INSERT INTO queue_items (tenant_id, job_id, queue_name, status, priority, schedule_at, available_at, payload, max_retries)\n    SELECT '${esc(j.tenant_id)}', j.job_id, 'default','queued',5,r.due_at,r.due_at,jsonb_build_object('job_type','deliver_reminder','reminder_id', r.reminder_id::text),3 FROM r CROSS JOIN j;\n    SELECT reminder_id::text, task_text, due_at FROM reminders WHERE tenant_id='${esc(j.tenant_id)}' AND actor_id='${esc(j.actor_id)}' ORDER BY created_at DESC LIMIT 1;`, mode:'remind'}}];\n}\nreturn [{json:{...j, action:'invalid', status:'error', error_code:'INVALID_COMMAND', response_text:`Invalid command: ${j.command || ''}`, response_data:{ok:false,error:{code:'INVALID_COMMAND',message:`Invalid command: ${j.command || ''}`}}}}];\n"
+      },
+      "id": "ea2d4bdc-3900-478a-a6b2-473cccccef83",
+      "name": "Build Execution Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "fb7ef120-97fd-4bca-ab43-5a983a6f3599",
+              "leftValue": "={{$json.action}}",
+              "rightValue": "service",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "2eb02829-bf27-4a55-8b89-57d8a75f7701",
+      "name": "IF Service Action",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        940,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={{$json.service_method || \"GET\"}}",
+        "url": "={{($env.ASSISTANT_SERVICE_BASE_URL || \"http://assistant-service:8000\").replace(/\\/$/, \"\") + $json.service_path}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.service_body || {}}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "19d37900-c492-40fb-82c3-719b4c036ced",
+      "name": "Service Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1180,
+        -40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst src = $json;\nif (src.statusCode && src.statusCode >= 400) {\n  const det = src.body?.detail || src.detail || {};\n  const code = det.code || 'DOWNSTREAM_FAILURE';\n  const msg = det.message || src.message || 'Service request failed';\n  return [{json:{...src, final_status:'error', ai_used:false, response_text: msg, response_data:{ok:false, request_id: src.request_id, error:{code, message: msg}}}}];\n}\nif (src.text) {\n  return [{json:{...src, final_status:'ok', ai_used:!!src.ai_used || true, response_text: src.text, response_data:{ok:true, request_id: src.request_id, ai_used:true, model: src.model || null, data:{text: src.text, artifact_id: src.artifact_id || null}}}}];\n}\nif (src.research_note_id) {\n  return [{json:{...src, final_status:'ok', ai_used:false, response_text:`Research note stored (${src.chunks_created} chunks).`, response_data:{ok:true, request_id: src.request_id, ai_used:false, data:{research_note_id: src.research_note_id, chunks_created: src.chunks_created}}}}];\n}\nif (src.status && src.postgres) {\n  return [{json:{...src, final_status:'ok', ai_used:false, response_text:`Health: postgres=${src.postgres}, ollama=${src.ollama}.`, response_data:{ok:true, request_id: src.request_id, ai_used:false, data:src}}}];\n}\nreturn [{json:{...src, final_status:'ok', ai_used:false, response_text:'Service request completed.', response_data:{ok:true, request_id: src.request_id, ai_used:false, data:src}}}];\n"
+      },
+      "id": "23e68cec-c424-4384-820b-f52fe85ebc83",
+      "name": "Format Service Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.sql}}",
+        "options": {}
+      },
+      "id": "b19ebc7b-d727-4af1-ae17-989f82161a69",
+      "name": "Execute SQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1180,
+        180
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "__CRED_POSTGRES__",
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst items = $input.all().map(i => i.json);\nconst first = items[0] || {};\nconst mode = $json.mode || first.mode || '';\nconst base = {...$json};\nif (mode === 'status') {\n  const row = first;\n  return [{json:{...base, final_status:'ok', ai_used:false, response_text:`Status: ${row.notes_count} notes, ${row.pending_reminders} pending reminders, ${row.active_jobs} active jobs.`, response_data:{ok:true, request_id: base.request_id, ai_used:false, data:row}}}];\n}\nif (mode === 'jobs') {\n  const summary = items.length ? items.map(r => `${r.job_type} [${r.status}]`).join('\\n') : 'No jobs found.';\n  return [{json:{...base, final_status:'ok', ai_used:false, response_text:summary, response_data:{ok:true, request_id: base.request_id, ai_used:false, data:items}}}];\n}\nif (mode === 'note') {\n  return [{json:{...base, final_status:'ok', ai_used:false, response_text:'Note saved.', response_data:{ok:true, request_id: base.request_id, ai_used:false, data:first}}}];\n}\nif (mode === 'reminders') {\n  const summary = items.length ? items.map(r => `\u2022 ${r.task_text} (${r.status})`).join('\\n') : 'No reminders found.';\n  return [{json:{...base, final_status:'ok', ai_used:false, response_text:summary, response_data:{ok:true, request_id: base.request_id, ai_used:false, data:items}}}];\n}\nif (mode === 'remind') {\n  return [{json:{...base, final_status:'ok', ai_used:false, response_text:`Reminder saved: ${first.task_text}`, response_data:{ok:true, request_id: base.request_id, ai_used:false, data:first}}}];\n}\nreturn [{json:{...base, final_status:'ok', ai_used:false, response_text:'SQL request completed.', response_data:{ok:true, request_id: base.request_id, ai_used:false, data:items}}}];\n"
+      },
+      "id": "f25c59f5-7bdc-4ed5-85fc-3e50ddda5c2b",
+      "name": "Format SQL Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (s) => String(s ?? '').replace(/'/g, \"''\");\nconst refs = JSON.stringify($json.response_data?.data || null).replace(/'/g, \"''\");\nreturn [{json:{\n  ...$json,\n  sql: `UPDATE audits SET decision='${esc($json.final_status === 'ok' ? 'allow' : 'deny')}', status='${esc($json.final_status === 'ok' ? 'completed' : 'failed')}',\n         error_code=${$json.final_status === 'ok' ? 'NULL' : `'${esc($json.error_code || 'DOWNSTREAM_FAILURE')}'`},\n         error_message=${$json.final_status === 'ok' ? 'NULL' : `'${esc($json.response_text || '')}'`},\n         ai_used=${$json.ai_used ? 'true' : 'false'}, ai_model=${$json.ai_used ? `'${esc($json.model || 'gemma3')}'` : 'NULL'},\n         ai_action_type=${$json.ai_used ? `'fallback_chat'` : 'NULL'}, completed_at=now(), grounding_source_refs='${esc(refs)}'::jsonb, updated_at=now()\n         WHERE request_id='${esc($json.request_id)}';\n         SELECT '${esc($json.request_id)}'::text AS request_id, '${esc($json.response_text || '')}'::text AS response_text;`\n}}];\n"
+      },
+      "id": "a5475f15-8556-4809-afb1-69a8077d7546",
+      "name": "Audit End SQL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.sql}}",
+        "options": {}
+      },
+      "id": "0f265d43-30f8-4b00-8e6f-951b088d3ad3",
+      "name": "Audit End",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1840,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "__CRED_POSTGRES__",
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "={{$json.chat_id.replace(\"tgchat-\", \"\")}}",
+        "text": "={{$json.response_text}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "eca4680a-bedc-4047-ada4-19169676f760",
+      "name": "Reply via Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2060,
+        80
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "__CRED_TELEGRAM_BOT__",
+          "name": "__CRED_TELEGRAM_BOT__"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Request": {
+      "main": [
+        [
+          {
+            "node": "Upsert Actor SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Actor SQL": {
+      "main": [
+        [
+          {
+            "node": "Upsert Actor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Actor": {
+      "main": [
+        [
+          {
+            "node": "RBAC SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RBAC SQL": {
+      "main": [
+        [
+          {
+            "node": "RBAC Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RBAC Check": {
+      "main": [
+        [
+          {
+            "node": "Audit Start SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Start SQL": {
+      "main": [
+        [
+          {
+            "node": "Audit Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Start": {
+      "main": [
+        [
+          {
+            "node": "Build Execution Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Execution Plan": {
+      "main": [
+        [
+          {
+            "node": "IF Service Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Service Action": {
+      "main": [
+        [
+          {
+            "node": "Service Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Service Request": {
+      "main": [
+        [
+          {
+            "node": "Format Service Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute SQL": {
+      "main": [
+        [
+          {
+            "node": "Format SQL Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Service Response": {
+      "main": [
+        [
+          {
+            "node": "Audit End SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format SQL Response": {
+      "main": [
+        [
+          {
+            "node": "Audit End SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit End SQL": {
+      "main": [
+        [
+          {
+            "node": "Audit End",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit End": {
+      "main": [
+        [
+          {
+            "node": "Reply via Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "191ced55-52ed-4522-b739-ca6c7d59f7a5",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "f2c047a6-841b-4399-8505-9973010c3fac",
+  "tags": []
+}

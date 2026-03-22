@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_google_drive_list_files",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Google Drive::list_files. Fill placeholder env vars before execution."
+      },
+      "id": "493dac72-5dc9-5e65-a1ad-a839b1b3ae09",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "99b58484-553b-540d-856a-0e5203ff0226",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"google_drive\",\"display_name\":\"Google Drive\",\"operation_id\":\"list_files\",\"method\":\"GET\",\"base_url\":\"{$env.GOOGLE_DRIVE_BASE_URL}\",\"path\":\"/drive/v3/files?q=__GOOGLE_DRIVE_QUERY__\",\"url\":\"{$env.GOOGLE_DRIVE_BASE_URL}/drive/v3/files?q=__GOOGLE_DRIVE_QUERY__\",\"headers\":{\"Authorization\":\"Bearer {$env.GOOGLE_DRIVE_ACCESS_TOKEN}\"},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"GOOGLE_DRIVE_BASE_URL\",\"GOOGLE_DRIVE_ACCESS_TOKEN\",\"GOOGLE_DRIVE_FOLDER_ID\"],\"notes\":\"List files, fetch metadata, and download/export content.\"}}];"
+      },
+      "id": "e36fd7b0-c4bb-5887-9d64-9ee006d0fe56",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "3213031e-89dc-58b5-97c7-5d4df60d2b11",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "93093c39-1e4f-4fb2-9da3-008c8708e6c1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "b02f7a3b-0397-4736-8cd8-afcea6f89ea4",
+  "pinData": {},
+  "tags": []
+}

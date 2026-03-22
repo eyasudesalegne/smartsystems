@@ -1,0 +1,93 @@
+{
+  "service_name": "azure_ml",
+  "display_name": "Azure Machine Learning",
+  "category": "mlops",
+  "integration_mode": "rest_api",
+  "auth_type": "oauth_bearer_or_client_credentials",
+  "auth_scheme": "oauth_bearer_or_client_credentials",
+  "base_url_env": "AZURE_ML_BASE_URL",
+  "base_url_placeholder": "{$env.AZURE_ML_BASE_URL}",
+  "required_credentials": [
+    "AZURE_ML_BASE_URL"
+  ],
+  "optional_credentials": [
+    "AZURE_ML_BEARER_TOKEN",
+    "AZURE_ML_TENANT_ID",
+    "AZURE_ML_CLIENT_ID",
+    "AZURE_ML_CLIENT_SECRET",
+    "AZURE_ML_SUBSCRIPTION_ID",
+    "AZURE_ML_RESOURCE_GROUP",
+    "AZURE_ML_WORKSPACE"
+  ],
+  "credential_placeholders": [
+    "AZURE_ML_BASE_URL",
+    "AZURE_ML_BEARER_TOKEN",
+    "AZURE_ML_CLIENT_ID",
+    "AZURE_ML_CLIENT_SECRET",
+    "AZURE_ML_RESOURCE_GROUP",
+    "AZURE_ML_SUBSCRIPTION_ID",
+    "AZURE_ML_TENANT_ID",
+    "AZURE_ML_WORKSPACE"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "list_jobs",
+      "method": "GET",
+      "path": "/jobs?api-version=2025-12-01",
+      "description": "List Azure ML jobs in the configured workspace."
+    },
+    {
+      "operation_id": "get_job",
+      "method": "GET",
+      "path": "/jobs/__AZURE_ML_JOB_NAME__?api-version=2025-12-01",
+      "description": "Get a single Azure ML job."
+    },
+    {
+      "operation_id": "list_models",
+      "method": "GET",
+      "path": "/models?api-version=2025-12-01",
+      "description": "List registered models."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "list_jobs",
+      "method": "GET",
+      "path": "/jobs?api-version=2025-12-01",
+      "description": "List Azure ML jobs in the configured workspace."
+    },
+    {
+      "operation_id": "get_job",
+      "method": "GET",
+      "path": "/jobs/__AZURE_ML_JOB_NAME__?api-version=2025-12-01",
+      "description": "Get a single Azure ML job."
+    },
+    {
+      "operation_id": "list_models",
+      "method": "GET",
+      "path": "/models?api-version=2025-12-01",
+      "description": "List registered models."
+    }
+  ],
+  "input_schema_summary": {
+    "list_jobs": {
+      "query": "optional list filters"
+    },
+    "get_job": {
+      "job_name": "string path placeholder"
+    },
+    "list_models": {
+      "query": "optional filters"
+    }
+  },
+  "output_schema_summary": {
+    "jobs": "Azure ML job list payload",
+    "job": "Azure ML job detail",
+    "models": "Azure ML model list payload"
+  },
+  "rate_limit_retry_notes": "Execution supports either AZURE_ML_BEARER_TOKEN or client-credentials token minting from AZURE_ML_TENANT_ID, AZURE_ML_CLIENT_ID, and AZURE_ML_CLIENT_SECRET. Retry 429/5xx and validate the workspace API version you target.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "Execution supports either AZURE_ML_BEARER_TOKEN or client-credentials token minting from AZURE_ML_TENANT_ID, AZURE_ML_CLIENT_ID, and AZURE_ML_CLIENT_SECRET. Retry 429/5xx and validate the workspace API version you target.",
+  "docs_reference": "https://learn.microsoft.com/en-us/rest/api/azureml/"
+}

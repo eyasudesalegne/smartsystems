@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_arxiv_search",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for arXiv::search. Fill placeholder env vars before execution."
+      },
+      "id": "8fb26c49-73e3-5f9b-ae03-c061ee563e19",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "88caf159-c383-538b-a8a2-7b8f3ebb2bbd",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"arxiv\",\"display_name\":\"arXiv\",\"operation_id\":\"search\",\"method\":\"GET\",\"base_url\":\"{$env.ARXIV_BASE_URL}\",\"path\":\"/api/query?search_query=all:__ARXIV_QUERY__&start=0&max_results=10\",\"url\":\"{$env.ARXIV_BASE_URL}/api/query?search_query=all:__ARXIV_QUERY__&start=0&max_results=10\",\"headers\":{},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"ARXIV_BASE_URL\"],\"notes\":\"Public search/feed ingestion for preprints.\"}}];"
+      },
+      "id": "35af13fb-e9e9-55d7-83a4-5bf7e84b324d",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "68ce7964-f44d-53c2-a440-7a9d701aa56e",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b90fcfa9-ab02-4b27-8e51-8c1fb77e821d",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "d0db458b-d2c0-49c8-9a0e-cac23fb71326",
+  "pinData": {},
+  "tags": []
+}

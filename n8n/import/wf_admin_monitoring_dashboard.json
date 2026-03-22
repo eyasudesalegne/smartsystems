@@ -1,0 +1,117 @@
+{
+  "name": "wf_admin_monitoring_dashboard",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_admin_monitoring_dashboard enterprise control-plane workflow."
+      },
+      "id": "0e314e62-ed68-417d-a630-6d342eeb9429",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7287033d-835b-40ca-a10a-9f55c4f630a9",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{}}];"
+      },
+      "id": "40353165-b8a6-4477-87ff-0ca3f45df2fa",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/admin/system\"}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "384bc897-e321-4542-ad9e-3cc61098766d",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || \"ok\", result: body}}];"
+      },
+      "id": "fb77b25b-ddb9-418d-b2b9-890efc0cea57",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

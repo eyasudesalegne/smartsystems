@@ -1,0 +1,120 @@
+{
+  "name": "wf_pubmed_search",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_pubmed_search backend bridge workflow. Review setup notes before running."
+      },
+      "id": "6cc45813-d64a-5829-9468-82314fd69745",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "9beb7de9-4ee2-5080-a727-bb7a447dec39",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\": \"pubmed\", \"operation_id\": \"search\", \"body\": {}, \"query\": {\"PUBMED_TERM\": \"cancer biomarkers\"}, \"headers\": {}, \"timeout_seconds\": 30}}];"
+      },
+      "id": "65266763-db95-5692-a584-fca9e7200b30",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/connectors/execute-live\"}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "4756371f-0079-56d5-a26e-714b9bbc7a64",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{ok: body.status !== \"error\", status: body.status || \"ok\", service_name: body.service_name || null, operation_id: body.operation_id || null, summary: body.summary || null, pagination: body.pagination || null, result: body.normalized || body.data || body}}];"
+      },
+      "id": "0abffbb4-5601-5422-8926-b67f6bbe2d3e",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

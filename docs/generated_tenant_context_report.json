@@ -1,0 +1,34 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "requested_tenant_id": "default",
+  "effective_tenant_id": "default",
+  "actor_id": "anonymous",
+  "role": "viewer",
+  "identity_tenant_id": "default",
+  "strict_enforcement": false,
+  "admin_override_enabled": true,
+  "has_access": true,
+  "resolution_mode": "requested",
+  "membership_count": 1,
+  "memberships": [
+    {
+      "tenant_id": "default",
+      "tenant_name": "Default",
+      "actor_id": "anonymous",
+      "role_name": "viewer",
+      "is_default": true,
+      "is_active": true,
+      "created_by": "fallback",
+      "updated_by": "fallback",
+      "metadata_json": {
+        "fallback": true
+      },
+      "created_at": null,
+      "updated_at": null
+    }
+  ],
+  "next_actions": [
+    "Tenant context is ready for scoped admin, connector, and workflow operations."
+  ]
+}

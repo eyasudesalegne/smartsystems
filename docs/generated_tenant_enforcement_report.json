@@ -1,0 +1,167 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "requested_tenant_id": "default",
+  "effective_tenant_id": "default",
+  "actor_id": "anonymous",
+  "role": "viewer",
+  "identity_tenant_id": "default",
+  "route": "/connectors/catalog",
+  "method": "GET",
+  "decision": "allow",
+  "reason": "same_tenant",
+  "strict_enforcement": false,
+  "policy": {
+    "tenant_id": "default",
+    "route_prefix": "/connectors/",
+    "resource_type": "connectors",
+    "strict_mode": "inherit",
+    "require_membership": true,
+    "allow_admin_override": true,
+    "allow_service_account_override": true,
+    "metadata_json": {
+      "notes": "Connector operations may cross tenants only through membership or explicit override.",
+      "source": "default"
+    },
+    "source": "default"
+  },
+  "membership_count": 1,
+  "memberships": [
+    {
+      "tenant_id": "default",
+      "tenant_name": "Default",
+      "actor_id": "anonymous",
+      "role_name": "viewer",
+      "is_default": true,
+      "is_active": true,
+      "created_by": "fallback",
+      "updated_by": "fallback",
+      "metadata_json": {
+        "fallback": true
+      },
+      "created_at": null,
+      "updated_at": null
+    }
+  ],
+  "accessible_tenants": [
+    "default"
+  ],
+  "policy_count": 8,
+  "policies": [
+    {
+      "tenant_id": "default",
+      "route_prefix": "/secrets/",
+      "resource_type": "secrets",
+      "strict_mode": "enforce",
+      "require_membership": true,
+      "allow_admin_override": false,
+      "allow_service_account_override": false,
+      "metadata_json": {
+        "notes": "Secret access stays tenant-bound unless an explicit membership exists.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/tenants/",
+      "resource_type": "tenants",
+      "strict_mode": "enforce",
+      "require_membership": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "metadata_json": {
+        "notes": "Tenant admin operations require either direct membership or an admin override.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/admin/",
+      "resource_type": "admin",
+      "strict_mode": "enforce",
+      "require_membership": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "metadata_json": {
+        "notes": "Admin summaries should stay scoped to the effective tenant.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/release/",
+      "resource_type": "release",
+      "strict_mode": "enforce",
+      "require_membership": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "metadata_json": {
+        "notes": "Release publication actions are tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/connectors/",
+      "resource_type": "connectors",
+      "strict_mode": "inherit",
+      "require_membership": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "metadata_json": {
+        "notes": "Connector operations may cross tenants only through membership or explicit override.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/jobs/",
+      "resource_type": "jobs",
+      "strict_mode": "inherit",
+      "require_membership": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "metadata_json": {
+        "notes": "Job operations inherit the package tenant defaults.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/workflows/",
+      "resource_type": "workflows",
+      "strict_mode": "inherit",
+      "require_membership": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "metadata_json": {
+        "notes": "Workflow operations inherit the package tenant defaults.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "route_prefix": "/",
+      "resource_type": "system",
+      "strict_mode": "inherit",
+      "require_membership": false,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "metadata_json": {
+        "notes": "Fallback policy when no more specific route prefix matches.",
+        "source": "default"
+      },
+      "source": "default"
+    }
+  ],
+  "next_actions": [
+    "Tenant enforcement is aligned for this route and actor."
+  ]
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "endpoint": "/ingest/note",
+    "payload": {
+      "tenant_id": "default",
+      "actor_id": "anonymous",
+      "title": "Methods note",
+      "body": "A local note about microscopy methods and segmentation."
+    }
+  },
+  {
+    "endpoint": "/ingest/paper",
+    "payload": {
+      "tenant_id": "default",
+      "actor_id": "anonymous",
+      "source_ref": "manual:paper1",
+      "title": "Paper 1",
+      "body": "This paper discusses weak supervision and grounded retrieval."
+    }
+  }
+]

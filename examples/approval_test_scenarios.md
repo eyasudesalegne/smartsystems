@@ -1,0 +1,3 @@
+- Approve a social draft created by `/draftpost` with a different reviewer.
+- Reject a manuscript approval and confirm status remains blocked.
+- Build a publishbundle and verify a publication approval is created.

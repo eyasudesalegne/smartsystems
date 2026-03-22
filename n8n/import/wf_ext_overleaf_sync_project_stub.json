@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_overleaf_sync_project_stub",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Overleaf::sync_project_stub. Fill placeholder env vars before execution."
+      },
+      "id": "58768935-162a-567a-b677-6d0e1f51a439",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "4ec7f85d-2551-516c-ba76-a39fa61b45ba",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"overleaf\",\"display_name\":\"Overleaf\",\"operation_id\":\"sync_project_stub\",\"method\":\"POST\",\"base_url\":\"{$env.OVERLEAF_BASE_URL}\",\"path\":\"/project/__OVERLEAF_PROJECT_ID__/sync\",\"url\":\"{$env.OVERLEAF_BASE_URL}/project/__OVERLEAF_PROJECT_ID__/sync\",\"headers\":{\"Authorization\":\"Bearer {$env.OVERLEAF_ACCESS_TOKEN}\"},\"body\":{\"project_id\":\"__OVERLEAF_PROJECT_ID__\",\"artifact_ref\":\"__LOCAL_LATEX_ARTIFACT__\"},\"query\":{},\"integration_mode\":\"manual_bridge\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"OVERLEAF_BASE_URL\",\"OVERLEAF_ACCESS_TOKEN\",\"OVERLEAF_PROJECT_ID\"],\"notes\":\"Project sync placeholder; keep generated LaTeX artifacts ready for manual or custom bridge upload.\"}}];"
+      },
+      "id": "2fb23e6a-106e-5c7d-93cf-f39601e6a8d4",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "5091685d-6224-5054-b54e-cbc112421502",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4ec0c934-40d3-45a9-892a-fdf12598b48e",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "df8e9015-46d2-4933-81cd-5829b514dc62",
+  "pinData": {},
+  "tags": []
+}

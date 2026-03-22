@@ -1,0 +1,119 @@
+{
+  "name": "wf_tenant_query_coverage_audit",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_tenant_query_coverage_audit calls /tenants/query-coverage-report so operators can see which high-risk read paths are query-scoped today and which paths still need stricter SQL-style tenant isolation."
+      },
+      "id": "note-1",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id:'default', requested_tenant_id:'default', actor_id:'admin', role:'admin', identity_tenant_id:'default'}}];"
+      },
+      "id": "code-1",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\\/$/, '') + '/tenants/query-coverage-report'}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "http-1",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', tenant_id: body.tenant_id, target_count: body.target_count || 0, covered_count: body.covered_count || 0, strict_target_count: body.strict_target_count || 0, targets: body.targets || [], next_actions: body.next_actions || []}}];"
+      },
+      "id": "code-2",
+      "name": "Normalize Coverage Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Coverage Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "wf-tenant-query-coverage-audit"
+}

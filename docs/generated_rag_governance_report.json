@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "document_count": 0,
+  "chunk_count": 0,
+  "embedding_version_count": 0,
+  "recent_documents": [],
+  "latest_embedding_models": [],
+  "next_actions": [
+    "Ingest one or more governed documents via /rag/documents/ingest before running retrieval smoke tests that depend on document chunks.",
+    "Confirm the embedding model is available in Ollama if you want embedding-version tracking recorded for governed documents."
+  ]
+}

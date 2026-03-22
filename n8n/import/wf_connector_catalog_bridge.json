@@ -1,0 +1,65 @@
+{
+  "name": "wf_connector_catalog_bridge",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Fetch connector catalog from the companion service."
+      },
+      "id": "0777c5bf-8414-47c3-95c6-a08c0fc630b0",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -120
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "75316bd5-a849-4a08-8337-e95cccd90ac6",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SERVICE_BASE_URL || \"http://service:8000\"}}/connectors/catalog",
+        "options": {}
+      },
+      "id": "baa7eaee-93ec-4efa-a61d-a3df14b9c66d",
+      "name": "Get Connector Catalog",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -220,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Connector Catalog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "cfd10364-c755-4c17-af10-150f14c5d2ad",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "69122e09-2434-4b0a-b476-8688a2993329",
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,67 @@
+{
+  "name": "wf_tenant_context_audit",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_tenant_context_audit returns the current tenant context and memberships from /tenants/context."
+      },
+      "id": "note-1",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-820, -140]
+    },
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-780, 40]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id: 'default'}}];"
+      },
+      "id": "code-1",
+      "name": "Build Query",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-460, 40]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\/$/, '') + '/tenants/context?tenant_id=' + encodeURIComponent($json.tenant_id || 'default')}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "http-1",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-120, 40]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', tenant_id: body.tenant_id, effective_tenant_id: body.effective_tenant_id, actor_id: body.actor_id, role: body.role, membership_count: body.membership_count || 0, memberships: body.memberships || [], next_actions: body.next_actions || []}}];"
+      },
+      "id": "code-2",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 40]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {"main": [[{"node": "Build Query", "type": "main", "index": 0}]]},
+    "Build Query": {"main": [[{"node": "Backend Request", "type": "main", "index": 0}]]},
+    "Backend Request": {"main": [[{"node": "Normalize Response", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}

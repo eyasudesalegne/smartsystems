@@ -1,0 +1,67 @@
+{
+  "name": "wf_release_publication_audit",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_release_publication_audit lists recent release publication records via /release/publications so operators can review publication history without opening the database."
+      },
+      "id": "note-1",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-820, -140]
+    },
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-780, 40]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id:'default', limit:20}}];"
+      },
+      "id": "code-1",
+      "name": "Build Query",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-460, 40]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\\/$/, '') + '/release/publications?tenant_id=' + encodeURIComponent($json.tenant_id || 'default') + '&limit=' + encodeURIComponent(String($json.limit || 20))}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "http-1",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-120, 40]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', count: body.count || 0, recent_versions: (body.items || []).map(item => ({release_version: item.release_version, publication_status: item.publication_status, package_path: item.package_path, created_at: item.created_at}))}}];"
+      },
+      "id": "code-2",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 40]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {"main": [[{"node": "Build Query", "type": "main", "index": 0}]]},
+    "Build Query": {"main": [[{"node": "Backend Request", "type": "main", "index": 0}]]},
+    "Backend Request": {"main": [[{"node": "Normalize Response", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}

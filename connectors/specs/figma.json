@@ -1,0 +1,85 @@
+{
+  "service_name": "figma",
+  "display_name": "Figma",
+  "category": "design",
+  "integration_mode": "rest_api",
+  "auth_type": "personal_access_token",
+  "auth_scheme": "personal_access_token",
+  "base_url_env": "FIGMA_BASE_URL",
+  "base_url_placeholder": "{$env.FIGMA_BASE_URL}",
+  "required_credentials": [
+    "FIGMA_ACCESS_TOKEN"
+  ],
+  "optional_credentials": [
+    "FIGMA_BASE_URL",
+    "FIGMA_FILE_KEY"
+  ],
+  "credential_placeholders": [
+    "FIGMA_ACCESS_TOKEN",
+    "FIGMA_BASE_URL",
+    "FIGMA_FILE_KEY"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "get_file",
+      "method": "GET",
+      "path": "/v1/files/__FIGMA_FILE_KEY__",
+      "description": "Get a file tree and metadata."
+    },
+    {
+      "operation_id": "get_nodes",
+      "method": "GET",
+      "path": "/v1/files/__FIGMA_FILE_KEY__/nodes?ids=__FIGMA_NODE_IDS__",
+      "description": "Get selected nodes."
+    },
+    {
+      "operation_id": "get_images",
+      "method": "GET",
+      "path": "/v1/images/__FIGMA_FILE_KEY__?ids=__FIGMA_NODE_IDS__&format=png",
+      "description": "Resolve export image URLs for nodes."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "get_file",
+      "method": "GET",
+      "path": "/v1/files/__FIGMA_FILE_KEY__",
+      "description": "Get a file tree and metadata."
+    },
+    {
+      "operation_id": "get_nodes",
+      "method": "GET",
+      "path": "/v1/files/__FIGMA_FILE_KEY__/nodes?ids=__FIGMA_NODE_IDS__",
+      "description": "Get selected nodes."
+    },
+    {
+      "operation_id": "get_images",
+      "method": "GET",
+      "path": "/v1/images/__FIGMA_FILE_KEY__?ids=__FIGMA_NODE_IDS__&format=png",
+      "description": "Resolve export image URLs for nodes."
+    }
+  ],
+  "input_schema_summary": {
+    "get_file": {
+      "file_key": "string path placeholder"
+    },
+    "get_nodes": {
+      "file_key": "string",
+      "node_ids": "comma-separated string"
+    },
+    "get_images": {
+      "file_key": "string",
+      "node_ids": "comma-separated string"
+    }
+  },
+  "output_schema_summary": {
+    "file": "Figma file JSON",
+    "nodes": "subset node JSON",
+    "images": "node-to-image-url map"
+  },
+  "rate_limit_retry_notes": "Send X-Figma-Token header. Retry 429/5xx with jitter.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "Send X-Figma-Token header. Retry 429/5xx with jitter.",
+  "docs_reference": "https://developers.figma-gov.com/docs/rest-api/files/"
+}

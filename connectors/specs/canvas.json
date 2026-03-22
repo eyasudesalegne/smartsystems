@@ -1,0 +1,85 @@
+{
+  "service_name": "canvas",
+  "display_name": "Canvas",
+  "category": "education_or_workspace",
+  "integration_mode": "rest_api",
+  "auth_type": "oauth_or_bearer",
+  "auth_scheme": "oauth_or_bearer",
+  "base_url_env": "CANVAS_BASE_URL",
+  "base_url_placeholder": "{$env.CANVAS_BASE_URL}",
+  "required_credentials": [
+    "CANVAS_BASE_URL",
+    "CANVAS_ACCESS_TOKEN"
+  ],
+  "optional_credentials": [
+    "CANVAS_ACCOUNT_ID",
+    "CANVAS_COURSE_ID"
+  ],
+  "credential_placeholders": [
+    "CANVAS_ACCESS_TOKEN",
+    "CANVAS_ACCOUNT_ID",
+    "CANVAS_BASE_URL",
+    "CANVAS_COURSE_ID"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "list_courses",
+      "method": "GET",
+      "path": "/api/v1/courses",
+      "description": "List courses from a Canvas LMS instance. Assumes Canvas means Canvas LMS."
+    },
+    {
+      "operation_id": "get_course",
+      "method": "GET",
+      "path": "/api/v1/courses/__CANVAS_COURSE_ID__",
+      "description": "Get one course."
+    },
+    {
+      "operation_id": "list_modules",
+      "method": "GET",
+      "path": "/api/v1/courses/__CANVAS_COURSE_ID__/modules",
+      "description": "List modules for a course."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "list_courses",
+      "method": "GET",
+      "path": "/api/v1/courses",
+      "description": "List courses from a Canvas LMS instance. Assumes Canvas means Canvas LMS."
+    },
+    {
+      "operation_id": "get_course",
+      "method": "GET",
+      "path": "/api/v1/courses/__CANVAS_COURSE_ID__",
+      "description": "Get one course."
+    },
+    {
+      "operation_id": "list_modules",
+      "method": "GET",
+      "path": "/api/v1/courses/__CANVAS_COURSE_ID__/modules",
+      "description": "List modules for a course."
+    }
+  ],
+  "input_schema_summary": {
+    "list_courses": {
+      "query": "optional enrollment filters"
+    },
+    "get_course": {
+      "course_id": "string path placeholder"
+    },
+    "list_modules": {
+      "course_id": "string path placeholder"
+    }
+  },
+  "output_schema_summary": {
+    "courses": "array[course]",
+    "course": "course JSON",
+    "modules": "array[module]"
+  },
+  "rate_limit_retry_notes": "This adapter assumes Instructure Canvas LMS because the service name Canvas is ambiguous. If you mean Canva or HTML canvas, swap the spec or keep this in placeholder mode.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "This adapter assumes Instructure Canvas LMS because the service name Canvas is ambiguous. If you mean Canva or HTML canvas, swap the spec or keep this in placeholder mode.",
+  "docs_reference": "https://developerdocs.instructure.com/services/canvas"
+}

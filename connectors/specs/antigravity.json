@@ -1,0 +1,62 @@
+{
+  "service_name": "antigravity",
+  "display_name": "Google Antigravity",
+  "category": "developer_tools",
+  "integration_mode": "local_bridge",
+  "auth_type": "custom_bridge_or_none",
+  "auth_scheme": "custom_bridge_or_none",
+  "base_url_env": "ANTIGRAVITY_BASE_URL",
+  "base_url_placeholder": "{$env.ANTIGRAVITY_BASE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "ANTIGRAVITY_BASE_URL",
+    "ANTIGRAVITY_ACCESS_TOKEN"
+  ],
+  "credential_placeholders": [
+    "ANTIGRAVITY_ACCESS_TOKEN",
+    "ANTIGRAVITY_BASE_URL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "push_workspace_stub",
+      "method": "LOCAL",
+      "path": "antigravity://workspace",
+      "description": "Build an agent handoff bundle for Antigravity-compatible environments.",
+      "default_body": {
+        "workspace_name": "connector-handoff",
+        "files": {
+          "README.md": "# Handoff"
+        }
+      }
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "push_workspace_stub",
+      "method": "LOCAL",
+      "path": "antigravity://workspace",
+      "description": "Build an agent handoff bundle for Antigravity-compatible environments.",
+      "default_body": {
+        "workspace_name": "connector-handoff",
+        "files": {
+          "README.md": "# Handoff"
+        }
+      }
+    }
+  ],
+  "input_schema_summary": {
+    "push_workspace_stub": {
+      "workspace_name": "string",
+      "files": "object filename->content"
+    }
+  },
+  "output_schema_summary": {
+    "bundle_path": "filesystem path to handoff zip",
+    "manifest_path": "filesystem path to manifest JSON"
+  },
+  "rate_limit_retry_notes": "Official docs exist, but no stable public REST contract was available for direct package automation here. The adapter creates a structured local handoff bundle instead.",
+  "implementation_status": "placeholder_bridge",
+  "status": "placeholder_bridge",
+  "notes": "Official docs exist, but no stable public REST contract was available for direct package automation here. The adapter creates a structured local handoff bundle instead.",
+  "docs_reference": "https://antigravity.google/docs/home"
+}

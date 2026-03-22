@@ -1,0 +1,120 @@
+{
+  "name": "wf_kaggle_dataset_lookup",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_kaggle_dataset_lookup backend bridge workflow. Review setup notes before running."
+      },
+      "id": "2e0535ea-1a97-5dd8-ade4-79c37ebdf6f9",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e4bf01d3-0a02-50c2-8734-8fbc804d042a",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\": \"kaggle\", \"operation_id\": \"list_files\", \"body\": {\"KAGGLE_DATASET_REF\": \"zynicide/wine-reviews\"}, \"query\": {}, \"headers\": {}, \"timeout_seconds\": 30}}];"
+      },
+      "id": "b6c59d5f-7463-590d-8a62-32babe30a949",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/connectors/execute-live\"}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "48ecdd11-4546-556e-8bc4-df3edd50027b",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{ok: body.status !== \"error\", status: body.status || \"ok\", service_name: body.service_name || null, operation_id: body.operation_id || null, summary: body.summary || null, pagination: body.pagination || null, result: body.normalized || body.data || body}}];"
+      },
+      "id": "dd3a76f3-dbf4-56bc-8982-f6dba0a564b2",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

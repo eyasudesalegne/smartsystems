@@ -1,0 +1,164 @@
+{
+  "name": "wf_delivery_notification_hub",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Phase 1 delivery hub. Supports telegram directly and documents optional Slack/email deferral."
+      },
+      "id": "4b6a8985-a037-45d9-bf47-1fb1b7b3a04c",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -540,
+        -120
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "77e1a368-7d80-4376-9e70-fcdcdf9ca62e",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{channel:$json.channel || 'telegram', text:$json.text || 'test', chat_id:$json.chat_id || ''}}];"
+      },
+      "id": "d22b5787-55b5-4527-9054-998e8e184729",
+      "name": "Normalize Delivery",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "1cbe6eba-b681-4724-810e-60b596eedf6c",
+              "leftValue": "={{$json.channel}}",
+              "rightValue": "telegram",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "09773b39-7fb3-4b0c-9532-d1e266df1144",
+      "name": "If Telegram",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "={{$json.chat_id.replace(\"tgchat-\", \"\")}}",
+        "text": "={{$json.text}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "d1dc66fe-a776-49dd-bc57-ac7bafd33014",
+      "name": "Telegram Send",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        0
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "__CRED_TELEGRAM_BOT__",
+          "name": "__CRED_TELEGRAM_BOT__"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'deferred', message:`Channel ${$json.channel} is deferred to Phase 2.`}}];"
+      },
+      "id": "eaf3f8e2-e8c1-4857-aa92-a354c559fec2",
+      "name": "Unsupported Channel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        180
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Delivery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Delivery": {
+      "main": [
+        [
+          {
+            "node": "If Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Telegram": {
+      "main": [
+        [
+          {
+            "node": "Telegram Send",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Unsupported Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e57762ad-f61d-4682-97d5-68688a016e66",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "8061647f-52da-4d03-b724-306096cd1c67",
+  "tags": []
+}

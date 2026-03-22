@@ -1,0 +1,9 @@
+{
+  "tenant_id": "default",
+  "actor_id": "anonymous",
+  "title": "Quarterly launch bundle",
+  "metadata": {
+    "campaign": "Q2"
+  },
+  "require_approval": true
+}

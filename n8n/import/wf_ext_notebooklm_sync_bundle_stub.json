@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_notebooklm_sync_bundle_stub",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for NotebookLM::sync_bundle_stub. Fill placeholder env vars before execution."
+      },
+      "id": "020c80da-6eb2-58e9-9060-ee95d941f92c",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c3d80056-216f-52d5-8728-1561e772fab3",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"notebooklm\",\"display_name\":\"NotebookLM\",\"operation_id\":\"sync_bundle_stub\",\"method\":\"POST\",\"base_url\":\"{$env.NOTEBOOKLM_BASE_URL}\",\"path\":\"/v1/notebooks/__NOTEBOOKLM_NOTEBOOK_ID__/sources:batchCreate\",\"url\":\"{$env.NOTEBOOKLM_BASE_URL}/v1/notebooks/__NOTEBOOKLM_NOTEBOOK_ID__/sources:batchCreate\",\"headers\":{\"Authorization\":\"Bearer {$env.NOTEBOOKLM_ACCESS_TOKEN}\"},\"body\":{\"title\":\"__NOTEBOOKLM_TITLE__\",\"sources\":[\"__SOURCE_URI__\"]},\"query\":{},\"integration_mode\":\"manual_bridge\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"NOTEBOOKLM_BASE_URL\",\"NOTEBOOKLM_ACCESS_TOKEN\",\"NOTEBOOKLM_NOTEBOOK_ID\"],\"notes\":\"NotebookLM-style handoff placeholder. Keep source bundles and summaries structured for an external bridge.\"}}];"
+      },
+      "id": "836bb1b1-fd1a-5c8a-a61c-b84eb8e52888",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "16d6e617-c5af-5c38-abd6-b1c2e4aa2a3e",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0dc1e733-d4a5-481a-b7dc-33037caedd34",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "fccae819-884b-46f7-9278-36b15cdd2d2d",
+  "pinData": {},
+  "tags": []
+}

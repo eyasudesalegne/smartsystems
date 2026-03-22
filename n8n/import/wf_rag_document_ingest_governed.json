@@ -1,0 +1,120 @@
+{
+  "name": "wf_rag_document_ingest_governed",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_rag_document_ingest_governed submits a governed document into /rag/documents/ingest so chunk and embedding-version tracking are captured in the control plane."
+      },
+      "id": "3d9a49e0-a388-425d-a228-d5fbd6289907",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e6a6066f-0734-484c-aa51-3b29ae4a68db",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id: $env.DEFAULT_TENANT_ID || 'default', actor_id: 'operator', source_ref: 'docs:sample', title: 'Governed sample document', body: 'This is a governed sample document for RAG ingestion.', mime_type: 'text/plain', metadata: {classification: 'internal', source_system: 'n8n'}}}];"
+      },
+      "id": "135f63ff-d3c9-4548-ad03-966f43b84263",
+      "name": "Build Document Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -470,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ ($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\\/$/, '') + '/rag/documents/ingest' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "c05a7f38-00ba-4223-a941-255c293d9df9",
+      "name": "Ingest Governed Document",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -110,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', document_id: body.document_id, source_ref: body.source_ref, chunks_created: body.chunks_created, vector_mode: body.vector_mode, embedding_model: body.embedding_model, raw: body}}];"
+      },
+      "id": "6cdc0254-c200-4970-8a86-20719832f755",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Document Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Document Payload": {
+      "main": [
+        [
+          {
+            "node": "Ingest Governed Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ingest Governed Document": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

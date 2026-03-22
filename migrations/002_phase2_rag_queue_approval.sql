@@ -1,0 +1,1 @@
+-- phase2 schema is fully consolidated in 001_init_phase1.sql and sql/unified_production_schema_v2.sql

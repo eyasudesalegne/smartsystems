@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_mermaid_build_mermaid_artifact",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Mermaid::build_mermaid_artifact. Fill placeholder env vars before execution."
+      },
+      "id": "358fe82b-0cbd-530c-8345-0fc6c636614f",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3c98785a-dfeb-5f3b-acc5-347e652aedab",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"mermaid\",\"display_name\":\"Mermaid\",\"operation_id\":\"build_mermaid_artifact\",\"method\":\"LOCAL\",\"base_url\":\"{$env.MERMAID_RENDER_BASE_URL}\",\"path\":\"mermaid://artifact\",\"url\":\"{$env.MERMAID_RENDER_BASE_URL}mermaid://artifact\",\"headers\":{},\"body\":{},\"query\":{},\"integration_mode\":\"artifact\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"MERMAID_RENDER_BASE_URL\"],\"notes\":\"Stores Mermaid source strings and emits render-ready artifacts.\"}}];"
+      },
+      "id": "a2d95d2b-630c-525e-b687-d39201f4d93b",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "c4f1592e-2aec-5014-8260-e29427d2ce16",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b0e4a9e6-24ec-4f10-a3a4-07ccd6120c7a",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "f3b4f019-1d5e-423d-b98e-ed4bf0007eff",
+  "pinData": {},
+  "tags": []
+}

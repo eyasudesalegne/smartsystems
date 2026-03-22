@@ -1,0 +1,79 @@
+{
+  "service_name": "vscode",
+  "display_name": "VS Code",
+  "category": "developer_tools",
+  "integration_mode": "local_bridge",
+  "auth_type": "none_or_custom_bridge",
+  "auth_scheme": "none_or_custom_bridge",
+  "base_url_env": "VSCODE_BRIDGE_URL",
+  "base_url_placeholder": "{$env.VSCODE_BRIDGE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "VSCODE_BRIDGE_MODE",
+    "VSCODE_BRIDGE_URL",
+    "VSCODE_ACCESS_TOKEN"
+  ],
+  "credential_placeholders": [
+    "VSCODE_ACCESS_TOKEN",
+    "VSCODE_BRIDGE_MODE",
+    "VSCODE_BRIDGE_URL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "push_workspace_stub",
+      "method": "LOCAL",
+      "path": "vscode://workspace",
+      "description": "Export generated files into a local VS Code handoff workspace.",
+      "default_body": {
+        "workspace_name": "n8n-connector-export",
+        "files": {
+          "README.md": "# VS Code export"
+        }
+      }
+    },
+    {
+      "operation_id": "emit_tasks_json",
+      "method": "LOCAL",
+      "path": "vscode://tasks",
+      "description": "Generate .vscode/tasks.json and launch.json scaffolding."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "push_workspace_stub",
+      "method": "LOCAL",
+      "path": "vscode://workspace",
+      "description": "Export generated files into a local VS Code handoff workspace.",
+      "default_body": {
+        "workspace_name": "n8n-connector-export",
+        "files": {
+          "README.md": "# VS Code export"
+        }
+      }
+    },
+    {
+      "operation_id": "emit_tasks_json",
+      "method": "LOCAL",
+      "path": "vscode://tasks",
+      "description": "Generate .vscode/tasks.json and launch.json scaffolding."
+    }
+  ],
+  "input_schema_summary": {
+    "push_workspace_stub": {
+      "workspace_name": "string",
+      "files": "object filename->content"
+    },
+    "emit_tasks_json": {
+      "tasks": "array[task spec]"
+    }
+  },
+  "output_schema_summary": {
+    "workspace_path": "local directory path",
+    "vscode_metadata": "generated .vscode files"
+  },
+  "rate_limit_retry_notes": "Uses file-system bridge semantics, not a fantasy remote VS Code control API.",
+  "implementation_status": "placeholder_bridge",
+  "status": "placeholder_bridge",
+  "notes": "Uses file-system bridge semantics, not a fantasy remote VS Code control API.",
+  "docs_reference": "https://code.visualstudio.com/api"
+}

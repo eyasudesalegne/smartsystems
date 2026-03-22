@@ -1,0 +1,120 @@
+{
+  "name": "wf_overleaf_project_bridge",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_overleaf_project_bridge backend bridge workflow. Review setup notes before running."
+      },
+      "id": "d3f12247-eb7d-5b3c-a5d6-4fe2aea2076e",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "109159d0-a150-5195-8c25-1bd69a978921",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\": \"overleaf\", \"operation_id\": \"build_project_bundle\", \"body\": {\"main_document\": \"main.tex\", \"files\": {\"main.tex\": \"\\\\documentclass{article}\\n\\\\begin{document}\\nBridge export to Overleaf.\\\\end{document}\\n\"}}, \"query\": {}, \"headers\": {}, \"timeout_seconds\": 30}}];"
+      },
+      "id": "c78e4f67-42ef-5606-92ec-c7b32e0971b0",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/connectors/execute-live\"}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "28a009aa-4e87-51ce-ada3-0a144b2fbe77",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{ok: body.status !== \"error\", status: body.status || \"ok\", service_name: body.service_name || null, operation_id: body.operation_id || null, summary: body.summary || null, pagination: body.pagination || null, result: body.normalized || body.data || body}}];"
+      },
+      "id": "83a0323d-a895-58fd-af85-fc4fc5a575c2",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

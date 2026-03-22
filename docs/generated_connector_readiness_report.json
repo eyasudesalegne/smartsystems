@@ -1,0 +1,413 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "count": 14,
+  "configured_count": 7,
+  "live_ready_count": 2,
+  "import_ready_count": 7,
+  "draft_ready_count": 0,
+  "connectors": [
+    {
+      "service_name": "antigravity",
+      "display_name": "Google Antigravity",
+      "configured": true,
+      "live_ready": false,
+      "implementation_status": "placeholder_bridge",
+      "integration_mode": "local_bridge",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 1,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 1,
+      "packaged_coverage_percent": 100,
+      "packaged_operations": [
+        "push_workspace_stub"
+      ],
+      "unpackaged_operations": [],
+      "recommended_import_workflow": "wf_ext_antigravity_push_workspace_stub.json",
+      "recommended_operation_id": "push_workspace_stub",
+      "recommended_draft_operation_id": "push_workspace_stub",
+      "notes": "Official docs exist, but no stable public REST contract was available for direct package automation here. The adapter creates a structured local handoff bundle instead.",
+      "workflow_notes": "",
+      "base_url_env": "ANTIGRAVITY_BASE_URL",
+      "recommended_action": "import_packaged_workflow"
+    },
+    {
+      "service_name": "arxiv",
+      "display_name": "arXiv",
+      "configured": true,
+      "live_ready": true,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 2,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 50,
+      "packaged_operations": [
+        "search"
+      ],
+      "unpackaged_operations": [
+        "by_id"
+      ],
+      "recommended_import_workflow": "wf_arxiv_search.json",
+      "recommended_operation_id": "search",
+      "recommended_draft_operation_id": "search",
+      "notes": "Public API. For bulk sync prefer OAI-PMH rather than the search API.",
+      "workflow_notes": "",
+      "base_url_env": "ARXIV_BASE_URL",
+      "recommended_action": "import_packaged_workflow"
+    },
+    {
+      "service_name": "azure_ml",
+      "display_name": "Azure Machine Learning",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "AZURE_ML_BASE_URL"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 2,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 66,
+      "packaged_operations": [
+        "list_jobs",
+        "get_job"
+      ],
+      "unpackaged_operations": [
+        "list_models"
+      ],
+      "recommended_import_workflow": "wf_azure_ml_job_lookup.json",
+      "recommended_operation_id": "list_jobs",
+      "recommended_draft_operation_id": "list_jobs",
+      "notes": "Execution supports either AZURE_ML_BEARER_TOKEN or client-credentials token minting from AZURE_ML_TENANT_ID, AZURE_ML_CLIENT_ID, and AZURE_ML_CLIENT_SECRET. Retry 429/5xx and validate the workspace API version you target.",
+      "workflow_notes": "",
+      "base_url_env": "AZURE_ML_BASE_URL",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "canvas",
+      "display_name": "Canvas",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "CANVAS_BASE_URL",
+        "CANVAS_ACCESS_TOKEN"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 1,
+      "packaged_coverage_percent": 33,
+      "packaged_operations": [
+        "list_courses"
+      ],
+      "unpackaged_operations": [
+        "get_course",
+        "list_modules"
+      ],
+      "recommended_import_workflow": "wf_ext_canvas_sync_artifact_stub.json",
+      "recommended_operation_id": "list_courses",
+      "recommended_draft_operation_id": "list_courses",
+      "notes": "This adapter assumes Instructure Canvas LMS because the service name Canvas is ambiguous. If you mean Canva or HTML canvas, swap the spec or keep this in placeholder mode.",
+      "workflow_notes": "Packaged workflow is a bridge stub; use workflow-draft for list_courses/get_course/list_modules variants.",
+      "base_url_env": "CANVAS_BASE_URL",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "drawio",
+      "display_name": "draw.io / diagrams.net",
+      "configured": true,
+      "live_ready": false,
+      "implementation_status": "placeholder_bridge",
+      "integration_mode": "file_bridge",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 2,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 1,
+      "packaged_coverage_percent": 50,
+      "packaged_operations": [
+        "build_xml_artifact"
+      ],
+      "unpackaged_operations": [
+        "emit_embed_link"
+      ],
+      "recommended_import_workflow": "wf_ext_drawio_build_xml_artifact.json",
+      "recommended_operation_id": "build_xml_artifact",
+      "recommended_draft_operation_id": "build_xml_artifact",
+      "notes": "No direct vendor REST call in this package. Use generated XML with app.diagrams.net or embed.diagrams.net.",
+      "workflow_notes": "",
+      "base_url_env": "DRAWIO_BASE_URL",
+      "recommended_action": "import_packaged_workflow"
+    },
+    {
+      "service_name": "figma",
+      "display_name": "Figma",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "FIGMA_ACCESS_TOKEN"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 33,
+      "packaged_operations": [
+        "get_file"
+      ],
+      "unpackaged_operations": [
+        "get_nodes",
+        "get_images"
+      ],
+      "recommended_import_workflow": "wf_figma_file_inspect.json",
+      "recommended_operation_id": "get_file",
+      "recommended_draft_operation_id": "get_file",
+      "notes": "Send X-Figma-Token header. Retry 429/5xx with jitter.",
+      "workflow_notes": "",
+      "base_url_env": "FIGMA_BASE_URL",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "google_drive",
+      "display_name": "Google Drive",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "GOOGLE_DRIVE_CLIENT_ID",
+        "GOOGLE_DRIVE_CLIENT_SECRET",
+        "GOOGLE_DRIVE_REFRESH_TOKEN"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 2,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 66,
+      "packaged_operations": [
+        "list_files",
+        "get_file"
+      ],
+      "unpackaged_operations": [
+        "export_file"
+      ],
+      "recommended_import_workflow": "wf_google_drive_fetch.json",
+      "recommended_operation_id": "list_files",
+      "recommended_draft_operation_id": "list_files",
+      "notes": "Execution supports either a supplied GOOGLE_DRIVE_ACCESS_TOKEN or refresh-token exchange using GOOGLE_DRIVE_CLIENT_ID, GOOGLE_DRIVE_CLIENT_SECRET, and GOOGLE_DRIVE_REFRESH_TOKEN. Retry 429/5xx with backoff.",
+      "workflow_notes": "",
+      "base_url_env": "GOOGLE_DRIVE_BASE_URL",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "kaggle",
+      "display_name": "Kaggle",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "partial_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "KAGGLE_USERNAME",
+        "KAGGLE_KEY"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 2,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 50,
+      "packaged_operations": [
+        "list_datasets"
+      ],
+      "unpackaged_operations": [
+        "list_files"
+      ],
+      "recommended_import_workflow": "wf_kaggle_dataset_lookup.json",
+      "recommended_operation_id": "list_datasets",
+      "recommended_draft_operation_id": "list_datasets",
+      "notes": "Uses Kaggle username/key basic auth. This package targets metadata operations, not bulk downloads.",
+      "workflow_notes": "",
+      "base_url_env": "KAGGLE_BASE_URL",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "mermaid",
+      "display_name": "Mermaid",
+      "configured": true,
+      "live_ready": false,
+      "implementation_status": "partial_api",
+      "integration_mode": "local_bridge",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 2,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 1,
+      "packaged_coverage_percent": 50,
+      "packaged_operations": [
+        "build_mermaid_artifact"
+      ],
+      "unpackaged_operations": [
+        "render_via_service"
+      ],
+      "recommended_import_workflow": "wf_ext_mermaid_build_mermaid_artifact.json",
+      "recommended_operation_id": "build_mermaid_artifact",
+      "recommended_draft_operation_id": "build_mermaid_artifact",
+      "notes": "Local artifact generation is deterministic. Remote render service is optional and may vary by deployment.",
+      "workflow_notes": "",
+      "base_url_env": "MERMAID_RENDER_BASE_URL",
+      "recommended_action": "import_packaged_workflow"
+    },
+    {
+      "service_name": "mlflow",
+      "display_name": "MLflow",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "MLFLOW_TRACKING_URI"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 2,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 66,
+      "packaged_operations": [
+        "list_experiments",
+        "get_run"
+      ],
+      "unpackaged_operations": [
+        "search_runs"
+      ],
+      "recommended_import_workflow": "wf_mlflow_run_lookup.json",
+      "recommended_operation_id": "list_experiments",
+      "recommended_draft_operation_id": "list_experiments",
+      "notes": "Retry 429/5xx with exponential backoff. POST bodies must be JSON per MLflow REST API.",
+      "workflow_notes": "",
+      "base_url_env": "MLFLOW_TRACKING_URI",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "notebooklm",
+      "display_name": "NotebookLM Enterprise",
+      "configured": false,
+      "live_ready": false,
+      "implementation_status": "partial_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [
+        "NOTEBOOKLM_BASE_URL",
+        "NOTEBOOKLM_ACCESS_TOKEN"
+      ],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 1,
+      "packaged_coverage_percent": 33,
+      "packaged_operations": [
+        "list_recent"
+      ],
+      "unpackaged_operations": [
+        "create_notebook",
+        "get_notebook"
+      ],
+      "recommended_import_workflow": "wf_ext_notebooklm_sync_bundle_stub.json",
+      "recommended_operation_id": "create_notebook",
+      "recommended_draft_operation_id": "create_notebook",
+      "notes": "Enterprise-only and currently Preview / Pre-GA. Consumer NotebookLM is not covered by this adapter.",
+      "workflow_notes": "Packaged workflow is a notebook-management bridge stub; use workflow-draft for other enterprise operations.",
+      "base_url_env": "NOTEBOOKLM_BASE_URL",
+      "recommended_action": "fill_credentials_then_import"
+    },
+    {
+      "service_name": "overleaf",
+      "display_name": "Overleaf",
+      "configured": true,
+      "live_ready": false,
+      "implementation_status": "manual_export_import",
+      "integration_mode": "manual_bridge",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 2,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 50,
+      "packaged_operations": [
+        "build_project_bundle"
+      ],
+      "unpackaged_operations": [
+        "open_in_overleaf"
+      ],
+      "recommended_import_workflow": "wf_overleaf_project_bridge.json",
+      "recommended_operation_id": "build_project_bundle",
+      "recommended_draft_operation_id": "build_project_bundle",
+      "notes": "The public Overleaf dev flow is link/form based rather than a general authenticated project REST API. This package generates import-ready payloads honestly instead of faking a full API.",
+      "workflow_notes": "Packaged workflows focus on bundle/import bridge behavior rather than undocumented live project APIs.",
+      "base_url_env": "OVERLEAF_BASE_URL",
+      "recommended_action": "import_packaged_workflow"
+    },
+    {
+      "service_name": "pubmed",
+      "display_name": "PubMed / NCBI E-utilities",
+      "configured": true,
+      "live_ready": true,
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 3,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 33,
+      "packaged_operations": [
+        "search"
+      ],
+      "unpackaged_operations": [
+        "summary",
+        "fetch_abstracts"
+      ],
+      "recommended_import_workflow": "wf_pubmed_search.json",
+      "recommended_operation_id": "search",
+      "recommended_draft_operation_id": "search",
+      "notes": "Optional email/API key improve rate limits. Respect NCBI usage guidance.",
+      "workflow_notes": "",
+      "base_url_env": "PUBMED_BASE_URL",
+      "recommended_action": "import_packaged_workflow"
+    },
+    {
+      "service_name": "vscode",
+      "display_name": "VS Code",
+      "configured": true,
+      "live_ready": false,
+      "implementation_status": "placeholder_bridge",
+      "integration_mode": "local_bridge",
+      "missing_credentials": [],
+      "present_credentials": [],
+      "supported_operations_count": 2,
+      "packaged_operations_count": 1,
+      "packaged_workflow_count": 2,
+      "packaged_coverage_percent": 50,
+      "packaged_operations": [
+        "push_workspace_stub"
+      ],
+      "unpackaged_operations": [
+        "emit_tasks_json"
+      ],
+      "recommended_import_workflow": "wf_vscode_local_bridge.json",
+      "recommended_operation_id": "push_workspace_stub",
+      "recommended_draft_operation_id": "push_workspace_stub",
+      "notes": "Uses file-system bridge semantics, not a fantasy remote VS Code control API.",
+      "workflow_notes": "",
+      "base_url_env": "VSCODE_BRIDGE_URL",
+      "recommended_action": "import_packaged_workflow"
+    }
+  ]
+}

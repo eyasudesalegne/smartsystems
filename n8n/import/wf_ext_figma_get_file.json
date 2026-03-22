@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_figma_get_file",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Figma::get_file. Fill placeholder env vars before execution."
+      },
+      "id": "2844adc5-7b8c-5f3d-a3ca-816ecd3870f3",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f363c804-951b-531f-926a-a529c90c36a9",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"figma\",\"display_name\":\"Figma\",\"operation_id\":\"get_file\",\"method\":\"GET\",\"base_url\":\"{$env.FIGMA_BASE_URL}\",\"path\":\"/v1/files/__FIGMA_FILE_KEY__\",\"url\":\"{$env.FIGMA_BASE_URL}/v1/files/__FIGMA_FILE_KEY__\",\"headers\":{\"X-Figma-Token\":\"{$env.FIGMA_ACCESS_TOKEN}\"},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"FIGMA_BASE_URL\",\"FIGMA_ACCESS_TOKEN\",\"FIGMA_FILE_KEY\"],\"notes\":\"File metadata and node export patterns for design ingestion.\"}}];"
+      },
+      "id": "919c2e45-8397-50de-a3d9-21ca517db627",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "9878eb7c-20ff-5147-b32c-1fd77e8626b5",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b78181a1-3710-42c0-81d7-d679cb9f510a",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "91520d29-5e70-4108-a061-0c0135124daa",
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_kaggle_list_datasets",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Kaggle::list_datasets. Fill placeholder env vars before execution."
+      },
+      "id": "6ba00e27-6064-5ba6-b857-362ea75806d0",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d012dd57-068b-5a57-b639-3c2c8a369357",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"kaggle\",\"display_name\":\"Kaggle\",\"operation_id\":\"list_datasets\",\"method\":\"GET\",\"base_url\":\"{$env.KAGGLE_BASE_URL}\",\"path\":\"/datasets/list?search=__KAGGLE_QUERY__\",\"url\":\"{$env.KAGGLE_BASE_URL}/datasets/list?search=__KAGGLE_QUERY__\",\"headers\":{\"Authorization\":\"Basic {$env.KAGGLE_USERNAME}:{$env.KAGGLE_KEY}\"},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"KAGGLE_BASE_URL\",\"KAGGLE_USERNAME\",\"KAGGLE_KEY\"],\"notes\":\"Dataset search and metadata via Kaggle API.\"}}];"
+      },
+      "id": "4907a8cc-3809-59ce-918c-6bc67549d8d9",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "9a222334-ac84-5e89-82b6-2f34346dd4b3",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "eb24712a-f92f-48fb-b1f9-6fdd11021b0d",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "19c3ebf4-3b02-4927-af31-fe65355d4b07",
+  "pinData": {},
+  "tags": []
+}

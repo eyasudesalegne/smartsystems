@@ -1,0 +1,75 @@
+{
+  "service_name": "mermaid",
+  "display_name": "Mermaid",
+  "category": "diagramming",
+  "integration_mode": "local_bridge",
+  "auth_type": "none_or_optional_render_service",
+  "auth_scheme": "none_or_optional_render_service",
+  "base_url_env": "MERMAID_RENDER_BASE_URL",
+  "base_url_placeholder": "{$env.MERMAID_RENDER_BASE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "MERMAID_RENDER_BASE_URL"
+  ],
+  "credential_placeholders": [
+    "MERMAID_RENDER_BASE_URL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "build_mermaid_artifact",
+      "method": "LOCAL",
+      "path": "mermaid://artifact",
+      "description": "Generate a .mmd source file and HTML preview shell.",
+      "default_body": {
+        "diagram": "flowchart TD\nA[Start] --> B[Finish]"
+      }
+    },
+    {
+      "operation_id": "render_via_service",
+      "method": "POST",
+      "path": "/render",
+      "description": "Optional remote render service call if you host one.",
+      "default_body": {
+        "diagram": "flowchart TD\nA --> B"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "build_mermaid_artifact",
+      "method": "LOCAL",
+      "path": "mermaid://artifact",
+      "description": "Generate a .mmd source file and HTML preview shell.",
+      "default_body": {
+        "diagram": "flowchart TD\nA[Start] --> B[Finish]"
+      }
+    },
+    {
+      "operation_id": "render_via_service",
+      "method": "POST",
+      "path": "/render",
+      "description": "Optional remote render service call if you host one.",
+      "default_body": {
+        "diagram": "flowchart TD\nA --> B"
+      }
+    }
+  ],
+  "input_schema_summary": {
+    "build_mermaid_artifact": {
+      "diagram": "mermaid source string"
+    },
+    "render_via_service": {
+      "diagram": "mermaid source string"
+    }
+  },
+  "output_schema_summary": {
+    "artifact_path": "filesystem path to .mmd",
+    "html_preview_path": "filesystem path to HTML wrapper",
+    "render_response": "remote render payload if configured"
+  },
+  "rate_limit_retry_notes": "Local artifact generation is deterministic. Remote render service is optional and may vary by deployment.",
+  "implementation_status": "partial_api",
+  "status": "partial_api",
+  "notes": "Local artifact generation is deterministic. Remote render service is optional and may vary by deployment.",
+  "docs_reference": "https://mermaid.js.org/intro/getting-started.html"
+}

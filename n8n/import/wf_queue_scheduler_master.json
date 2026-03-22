@@ -1,0 +1,107 @@
+{
+  "name": "wf_queue_scheduler_master",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Phase 1 queue scheduler snapshot. Writes a lightweight queued-job snapshot to audits via Postgres."
+      },
+      "id": "33e99db4-551c-43c7-9259-82d0c0b8c970",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "9c00b03a-4654-4d75-b568-697930c2f1c1",
+      "name": "Cron Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const id=(globalThis.crypto?.randomUUID?globalThis.crypto.randomUUID():`${Date.now()}`); return [{json:{sql:`INSERT INTO audits (request_id, tenant_id, actor_id, source, channel, route, domain, command, decision, status, started_at, completed_at, error_message) VALUES ('${id}','default','scheduler','n8n','system','scheduler','phase1','/jobs','allow','completed',now(),now(), concat('queued_jobs=', (SELECT COUNT(*) FROM queue_items WHERE status='queued')));`}}];"
+      },
+      "id": "400464b2-34ab-4c81-9239-b61b44537311",
+      "name": "Build Snapshot SQL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{$json.sql}}",
+        "options": {}
+      },
+      "id": "25d3a2b8-56dd-4f29-b436-ec6f467ba413",
+      "name": "Write Snapshot",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -280,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "__CRED_POSTGRES__",
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cron Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Snapshot SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Snapshot SQL": {
+      "main": [
+        [
+          {
+            "node": "Write Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "337b7821-63fe-4e85-b550-e338dd22f195",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "cc674cb0-9293-4bf0-8685-5eccf22c7af3",
+  "tags": []
+}

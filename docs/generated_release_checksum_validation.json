@@ -1,0 +1,16 @@
+{
+  "checksum_algorithm": "sha256",
+  "manifest_checksum": "285dad05558797f476f602c756259eaeb85a837d61af305f1996bf461d457dc1",
+  "mismatch_count": 0,
+  "mismatched_files": [],
+  "missing_count": 0,
+  "missing_files": [],
+  "next_actions": [
+    "Checksums validated successfully. Proceed to release preflight or deployment."
+  ],
+  "release_version": "0.5.0-enterprise-release",
+  "status": "ok",
+  "tenant_id": "default",
+  "valid": true,
+  "validated_file_count": 209
+}

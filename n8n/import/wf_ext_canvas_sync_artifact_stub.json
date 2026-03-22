@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_canvas_sync_artifact_stub",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Canvas (generic bridge)::sync_artifact_stub. Fill placeholder env vars before execution."
+      },
+      "id": "b5041bd1-43c5-5a53-9fd7-34c0ddcb4a02",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e0a16109-ec14-5926-bddb-3325f3d21e90",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"canvas\",\"display_name\":\"Canvas (generic bridge)\",\"operation_id\":\"sync_artifact_stub\",\"method\":\"POST\",\"base_url\":\"{$env.CANVAS_BASE_URL}\",\"path\":\"/v1/workspaces/__CANVAS_ACCOUNT_ID__/artifacts\",\"url\":\"{$env.CANVAS_BASE_URL}/v1/workspaces/__CANVAS_ACCOUNT_ID__/artifacts\",\"headers\":{\"Authorization\":\"Bearer {$env.CANVAS_ACCESS_TOKEN}\"},\"body\":{},\"query\":{},\"integration_mode\":\"manual_bridge\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"CANVAS_BASE_URL\",\"CANVAS_ACCESS_TOKEN\",\"CANVAS_ACCOUNT_ID\"],\"notes\":\"Generic Canvas bridge placeholder because \\\"Canvas\\\" may refer to different products in different stacks.\"}}];"
+      },
+      "id": "1c146241-befc-55a0-a99d-f5070afc5a04",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "1e0b4416-b304-59f4-bd3f-d565d28c0b21",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c8f495b9-dbc0-496d-8690-c8604cfa1f8b",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "f28dcd22-6fbb-4a0a-8b54-168a6a8bc10f",
+  "pinData": {},
+  "tags": []
+}

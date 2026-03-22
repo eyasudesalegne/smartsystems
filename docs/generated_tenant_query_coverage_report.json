@@ -1,0 +1,303 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "requested_tenant_id": "default",
+  "effective_tenant_id": "default",
+  "actor_id": "anonymous",
+  "role": "viewer",
+  "identity_tenant_id": "default",
+  "target_count": 19,
+  "covered_count": 19,
+  "strict_target_count": 1,
+  "targets": [
+    {
+      "route": "/release/publications",
+      "resource_table": "release_publications",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Publication history should always be query-scoped by tenant.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/releases",
+      "resource_table": "release_publications",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Admin release summaries should exclude cross-tenant rows.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/release/channels",
+      "resource_table": "release_channels",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Release channels are tenant-scoped by default.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/release-channels",
+      "resource_table": "release_channels",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Admin release channel summaries should remain tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/release/channel-executions",
+      "resource_table": "release_channel_executions",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Release channel execution history is tenant-scoped by default.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/release-channel-executions",
+      "resource_table": "release_channel_executions",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Admin release execution summaries should remain tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/queue",
+      "resource_table": "queue_items",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Queue summaries should exclude cross-tenant queue rows.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/jobs",
+      "resource_table": "jobs",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Job summaries should exclude cross-tenant job rows.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/jobs/status/{job_id}",
+      "resource_table": "jobs",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Direct job-status reads should stay tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/workflows",
+      "resource_table": "workflow_versions",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Workflow summaries should exclude cross-tenant versions.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/workflows/version/history/{workflow_id}",
+      "resource_table": "workflow_versions",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Workflow history reads should stay tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/connectors",
+      "resource_table": "connector_metrics",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Connector summaries should remain tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/connectors/{service_name}/health",
+      "resource_table": "connector_metrics",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Connector health reads should remain tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/connectors/{service_name}/metrics",
+      "resource_table": "connector_metrics",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Connector metrics reads should remain tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/ai/models",
+      "resource_table": "model_registry",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Model registry reads should be tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/ai/prompts",
+      "resource_table": "prompt_registry",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Prompt registry reads should be tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/rag/governance",
+      "resource_table": "documents",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "RAG governance reads should stay tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/lifecycle",
+      "resource_table": "retention_policies",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Lifecycle policy summaries should remain tenant-scoped.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": false,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    },
+    {
+      "route": "/admin/tenants",
+      "resource_table": "tenant_memberships",
+      "action": "read",
+      "strict_mode": "inherit",
+      "notes": "Tenant admin summaries should stay within the effective tenant context by default.",
+      "source": "default",
+      "decision": "allow",
+      "reason": "same_tenant",
+      "strict_enforcement": true,
+      "visible_tenant_ids": [
+        "default"
+      ],
+      "query_scope_sql": "WHERE tenant_id IN ('default')"
+    }
+  ],
+  "next_actions": [
+    "Promote more tenant query-scope targets to enforce mode before claiming full SQL-style tenant isolation.",
+    "Continue migrating remaining list/admin/query paths so request-context tenant scoping is enforced inside SQL where possible."
+  ]
+}

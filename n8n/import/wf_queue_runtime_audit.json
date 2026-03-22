@@ -1,0 +1,117 @@
+{
+  "name": "wf_queue_runtime_audit",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_queue_runtime_audit inspects backend selection, worker concurrency, retry backoff, and worker heartbeat via /admin/queue."
+      },
+      "id": "9ce5e4a4-9bd8-4c6f-b7a0-85c63dc1c999",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "dc75d421-99da-47a8-b106-7f4914541d03",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id: $env.DEFAULT_TENANT_ID || 'default'}}];"
+      },
+      "id": "1d62233c-7732-46a4-826f-d931a10df705",
+      "name": "Build Tenant",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -470,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\\/$/, '') + '/admin/queue?tenant_id=' + encodeURIComponent($json.tenant_id)}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "864efee5-0624-4995-b34b-9139cf227763",
+      "name": "Fetch Queue Runtime",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -110,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; const summary = body.summary || {}; return [{json:{status: body.status || 'ok', tenant_id: body.tenant_id || 'default', queue_backend: summary.queue_backend, requested_queue_backend: summary.requested_queue_backend, worker_concurrency: summary.worker_concurrency, retry_backoff_base_seconds: summary.retry_backoff_base_seconds, retry_backoff_max_seconds: summary.retry_backoff_max_seconds, active_workers: summary.active_workers, backend_health: summary.backend_health || {}, raw: body}}];"
+      },
+      "id": "b246f840-12f6-49f9-a4d9-e98e12cdbb2c",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Tenant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Tenant": {
+      "main": [
+        [
+          {
+            "node": "Fetch Queue Runtime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Queue Runtime": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

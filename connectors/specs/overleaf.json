@@ -1,0 +1,77 @@
+{
+  "service_name": "overleaf",
+  "display_name": "Overleaf",
+  "category": "publishing",
+  "integration_mode": "manual_bridge",
+  "auth_type": "none_or_custom_bridge",
+  "auth_scheme": "none_or_custom_bridge",
+  "base_url_env": "OVERLEAF_BASE_URL",
+  "base_url_placeholder": "{$env.OVERLEAF_BASE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "OVERLEAF_BASE_URL",
+    "OVERLEAF_ACCESS_TOKEN"
+  ],
+  "credential_placeholders": [
+    "OVERLEAF_ACCESS_TOKEN",
+    "OVERLEAF_BASE_URL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "build_project_bundle",
+      "method": "LOCAL",
+      "path": "overleaf://bundle",
+      "description": "Generate a zip bundle and Overleaf import URL parameters.",
+      "default_body": {
+        "main_document": "main.tex",
+        "files": {
+          "main.tex": "\\documentclass{article}\n\\begin{document}\nHello from Overleaf bridge.\\end{document}\n"
+        }
+      }
+    },
+    {
+      "operation_id": "open_in_overleaf",
+      "method": "LOCAL",
+      "path": "overleaf://open",
+      "description": "Generate a URL or form payload for the Open in Overleaf bridge."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "build_project_bundle",
+      "method": "LOCAL",
+      "path": "overleaf://bundle",
+      "description": "Generate a zip bundle and Overleaf import URL parameters.",
+      "default_body": {
+        "main_document": "main.tex",
+        "files": {
+          "main.tex": "\\documentclass{article}\n\\begin{document}\nHello from Overleaf bridge.\\end{document}\n"
+        }
+      }
+    },
+    {
+      "operation_id": "open_in_overleaf",
+      "method": "LOCAL",
+      "path": "overleaf://open",
+      "description": "Generate a URL or form payload for the Open in Overleaf bridge."
+    }
+  ],
+  "input_schema_summary": {
+    "build_project_bundle": {
+      "files": "object filename->content",
+      "main_document": "string"
+    },
+    "open_in_overleaf": {
+      "snip_uri": "remote URI or data URL"
+    }
+  },
+  "output_schema_summary": {
+    "bundle_path": "filesystem path to zip",
+    "open_url": "Overleaf docs URL or POST payload"
+  },
+  "rate_limit_retry_notes": "The public Overleaf dev flow is link/form based rather than a general authenticated project REST API. This package generates import-ready payloads honestly instead of faking a full API.",
+  "implementation_status": "manual_export_import",
+  "status": "manual_export_import",
+  "notes": "The public Overleaf dev flow is link/form based rather than a general authenticated project REST API. This package generates import-ready payloads honestly instead of faking a full API.",
+  "docs_reference": "https://www.overleaf.com/devs"
+}

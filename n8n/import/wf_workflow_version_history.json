@@ -1,0 +1,117 @@
+{
+  "name": "wf_workflow_version_history",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_workflow_version_history queries workflow version history from the enterprise control plane."
+      },
+      "id": "0edb4788-e6e6-48c1-8c14-10f5aac7d08c",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "03a122c9-664e-4d99-a809-1c263580d113",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id:'default', include_definition:false}}];"
+      },
+      "id": "651f092b-694b-42ed-8d33-9fa57b404a70",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/workflows/version/history/wf_pubmed_search\" + '?tenant_id=' + encodeURIComponent($json.tenant_id || 'default') + '&include_definition=' + encodeURIComponent(String($json.include_definition ?? false))}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "f9cf7698-6652-4e26-b2b3-4fa6c8e8c9fb",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', result: body}}];"
+      },
+      "id": "28ca138f-3aaf-4cf1-b151-07be91977fc5",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Payload": {
+      "main": [
+        [
+          {
+            "node": "Backend Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

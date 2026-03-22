@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "workflow_id": "wf_workflow_promotion_pipeline",
+  "allowed": true,
+  "execution_count_window": 0,
+  "remaining_executions": 120,
+  "retry_after_seconds": null,
+  "reason": "ok",
+  "policy": {
+    "tenant_id": "default",
+    "workflow_id": "wf_workflow_promotion_pipeline",
+    "enabled": true,
+    "max_executions_per_window": 120,
+    "window_seconds": 60
+  }
+}

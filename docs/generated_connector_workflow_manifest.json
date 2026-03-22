@@ -1,0 +1,495 @@
+{
+  "connectors": [
+    {
+      "display_name": "Google Antigravity",
+      "draftable_operations": [
+        "push_workspace_stub"
+      ],
+      "implementation_status": "placeholder_bridge",
+      "integration_mode": "local_bridge",
+      "notes": "",
+      "operation_workflow_files": {
+        "push_workspace_stub": [
+          "wf_ext_antigravity_push_workspace_stub.json"
+        ]
+      },
+      "packaged_operations": [
+        "push_workspace_stub"
+      ],
+      "packaged_workflow_count": 1,
+      "packaged_workflows": [
+        "wf_ext_antigravity_push_workspace_stub.json"
+      ],
+      "recommended_draft_operation_id": "push_workspace_stub",
+      "recommended_import_workflow": "wf_ext_antigravity_push_workspace_stub.json",
+      "service_name": "antigravity",
+      "supported_operations": [
+        "push_workspace_stub"
+      ],
+      "unpackaged_operations": []
+    },
+    {
+      "display_name": "arXiv",
+      "draftable_operations": [
+        "search",
+        "by_id"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "search": [
+          "wf_ext_arxiv_search.json",
+          "wf_arxiv_search.json"
+        ]
+      },
+      "packaged_operations": [
+        "search"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_arxiv_search.json",
+        "wf_ext_arxiv_search.json"
+      ],
+      "recommended_draft_operation_id": "search",
+      "recommended_import_workflow": "wf_arxiv_search.json",
+      "service_name": "arxiv",
+      "supported_operations": [
+        "search",
+        "by_id"
+      ],
+      "unpackaged_operations": [
+        "by_id"
+      ]
+    },
+    {
+      "display_name": "Azure Machine Learning",
+      "draftable_operations": [
+        "list_jobs",
+        "get_job",
+        "list_models"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "get_job": [
+          "wf_azure_ml_job_lookup.json"
+        ],
+        "list_jobs": [
+          "wf_ext_azure_ml_list_jobs.json"
+        ]
+      },
+      "packaged_operations": [
+        "list_jobs",
+        "get_job"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_azure_ml_job_lookup.json",
+        "wf_ext_azure_ml_list_jobs.json"
+      ],
+      "recommended_draft_operation_id": "list_jobs",
+      "recommended_import_workflow": "wf_azure_ml_job_lookup.json",
+      "service_name": "azure_ml",
+      "supported_operations": [
+        "list_jobs",
+        "get_job",
+        "list_models"
+      ],
+      "unpackaged_operations": [
+        "list_models"
+      ]
+    },
+    {
+      "display_name": "Canvas",
+      "draftable_operations": [
+        "list_courses",
+        "get_course",
+        "list_modules"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "Packaged workflow is a bridge stub; use workflow-draft for list_courses/get_course/list_modules variants.",
+      "operation_workflow_files": {
+        "list_courses": [
+          "wf_ext_canvas_sync_artifact_stub.json"
+        ]
+      },
+      "packaged_operations": [
+        "list_courses"
+      ],
+      "packaged_workflow_count": 1,
+      "packaged_workflows": [
+        "wf_ext_canvas_sync_artifact_stub.json"
+      ],
+      "recommended_draft_operation_id": "list_courses",
+      "recommended_import_workflow": "wf_ext_canvas_sync_artifact_stub.json",
+      "service_name": "canvas",
+      "supported_operations": [
+        "list_courses",
+        "get_course",
+        "list_modules"
+      ],
+      "unpackaged_operations": [
+        "get_course",
+        "list_modules"
+      ]
+    },
+    {
+      "display_name": "draw.io / diagrams.net",
+      "draftable_operations": [
+        "build_xml_artifact",
+        "emit_embed_link"
+      ],
+      "implementation_status": "placeholder_bridge",
+      "integration_mode": "file_bridge",
+      "notes": "",
+      "operation_workflow_files": {
+        "build_xml_artifact": [
+          "wf_ext_drawio_build_xml_artifact.json"
+        ]
+      },
+      "packaged_operations": [
+        "build_xml_artifact"
+      ],
+      "packaged_workflow_count": 1,
+      "packaged_workflows": [
+        "wf_ext_drawio_build_xml_artifact.json"
+      ],
+      "recommended_draft_operation_id": "build_xml_artifact",
+      "recommended_import_workflow": "wf_ext_drawio_build_xml_artifact.json",
+      "service_name": "drawio",
+      "supported_operations": [
+        "build_xml_artifact",
+        "emit_embed_link"
+      ],
+      "unpackaged_operations": [
+        "emit_embed_link"
+      ]
+    },
+    {
+      "display_name": "Figma",
+      "draftable_operations": [
+        "get_file",
+        "get_nodes",
+        "get_images"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "get_file": [
+          "wf_ext_figma_get_file.json",
+          "wf_figma_file_inspect.json"
+        ]
+      },
+      "packaged_operations": [
+        "get_file"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_figma_file_inspect.json",
+        "wf_ext_figma_get_file.json"
+      ],
+      "recommended_draft_operation_id": "get_file",
+      "recommended_import_workflow": "wf_figma_file_inspect.json",
+      "service_name": "figma",
+      "supported_operations": [
+        "get_file",
+        "get_nodes",
+        "get_images"
+      ],
+      "unpackaged_operations": [
+        "get_nodes",
+        "get_images"
+      ]
+    },
+    {
+      "display_name": "Google Drive",
+      "draftable_operations": [
+        "list_files",
+        "get_file",
+        "export_file"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "get_file": [
+          "wf_google_drive_fetch.json"
+        ],
+        "list_files": [
+          "wf_ext_google_drive_list_files.json"
+        ]
+      },
+      "packaged_operations": [
+        "list_files",
+        "get_file"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_google_drive_fetch.json",
+        "wf_ext_google_drive_list_files.json"
+      ],
+      "recommended_draft_operation_id": "list_files",
+      "recommended_import_workflow": "wf_google_drive_fetch.json",
+      "service_name": "google_drive",
+      "supported_operations": [
+        "list_files",
+        "get_file",
+        "export_file"
+      ],
+      "unpackaged_operations": [
+        "export_file"
+      ]
+    },
+    {
+      "display_name": "Kaggle",
+      "draftable_operations": [
+        "list_datasets",
+        "list_files"
+      ],
+      "implementation_status": "partial_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "list_datasets": [
+          "wf_ext_kaggle_list_datasets.json",
+          "wf_kaggle_dataset_lookup.json"
+        ]
+      },
+      "packaged_operations": [
+        "list_datasets"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_kaggle_dataset_lookup.json",
+        "wf_ext_kaggle_list_datasets.json"
+      ],
+      "recommended_draft_operation_id": "list_datasets",
+      "recommended_import_workflow": "wf_kaggle_dataset_lookup.json",
+      "service_name": "kaggle",
+      "supported_operations": [
+        "list_datasets",
+        "list_files"
+      ],
+      "unpackaged_operations": [
+        "list_files"
+      ]
+    },
+    {
+      "display_name": "Mermaid",
+      "draftable_operations": [
+        "build_mermaid_artifact",
+        "render_via_service"
+      ],
+      "implementation_status": "partial_api",
+      "integration_mode": "local_bridge",
+      "notes": "",
+      "operation_workflow_files": {
+        "build_mermaid_artifact": [
+          "wf_ext_mermaid_build_mermaid_artifact.json"
+        ]
+      },
+      "packaged_operations": [
+        "build_mermaid_artifact"
+      ],
+      "packaged_workflow_count": 1,
+      "packaged_workflows": [
+        "wf_ext_mermaid_build_mermaid_artifact.json"
+      ],
+      "recommended_draft_operation_id": "build_mermaid_artifact",
+      "recommended_import_workflow": "wf_ext_mermaid_build_mermaid_artifact.json",
+      "service_name": "mermaid",
+      "supported_operations": [
+        "build_mermaid_artifact",
+        "render_via_service"
+      ],
+      "unpackaged_operations": [
+        "render_via_service"
+      ]
+    },
+    {
+      "display_name": "MLflow",
+      "draftable_operations": [
+        "list_experiments",
+        "search_runs",
+        "get_run"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "get_run": [
+          "wf_mlflow_run_lookup.json"
+        ],
+        "list_experiments": [
+          "wf_ext_mlflow_list_experiments.json"
+        ]
+      },
+      "packaged_operations": [
+        "list_experiments",
+        "get_run"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_mlflow_run_lookup.json",
+        "wf_ext_mlflow_list_experiments.json"
+      ],
+      "recommended_draft_operation_id": "list_experiments",
+      "recommended_import_workflow": "wf_mlflow_run_lookup.json",
+      "service_name": "mlflow",
+      "supported_operations": [
+        "list_experiments",
+        "search_runs",
+        "get_run"
+      ],
+      "unpackaged_operations": [
+        "search_runs"
+      ]
+    },
+    {
+      "display_name": "NotebookLM Enterprise",
+      "draftable_operations": [
+        "create_notebook",
+        "get_notebook",
+        "list_recent"
+      ],
+      "implementation_status": "partial_api",
+      "integration_mode": "rest_api",
+      "notes": "Packaged workflow is a notebook-management bridge stub; use workflow-draft for other enterprise operations.",
+      "operation_workflow_files": {
+        "list_recent": [
+          "wf_ext_notebooklm_sync_bundle_stub.json"
+        ]
+      },
+      "packaged_operations": [
+        "list_recent"
+      ],
+      "packaged_workflow_count": 1,
+      "packaged_workflows": [
+        "wf_ext_notebooklm_sync_bundle_stub.json"
+      ],
+      "recommended_draft_operation_id": "create_notebook",
+      "recommended_import_workflow": "wf_ext_notebooklm_sync_bundle_stub.json",
+      "service_name": "notebooklm",
+      "supported_operations": [
+        "create_notebook",
+        "get_notebook",
+        "list_recent"
+      ],
+      "unpackaged_operations": [
+        "create_notebook",
+        "get_notebook"
+      ]
+    },
+    {
+      "display_name": "Overleaf",
+      "draftable_operations": [
+        "build_project_bundle",
+        "open_in_overleaf"
+      ],
+      "implementation_status": "manual_export_import",
+      "integration_mode": "manual_bridge",
+      "notes": "Packaged workflows focus on bundle/import bridge behavior rather than undocumented live project APIs.",
+      "operation_workflow_files": {
+        "build_project_bundle": [
+          "wf_overleaf_project_bridge.json",
+          "wf_ext_overleaf_sync_project_stub.json"
+        ]
+      },
+      "packaged_operations": [
+        "build_project_bundle"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_overleaf_project_bridge.json",
+        "wf_ext_overleaf_sync_project_stub.json"
+      ],
+      "recommended_draft_operation_id": "build_project_bundle",
+      "recommended_import_workflow": "wf_overleaf_project_bridge.json",
+      "service_name": "overleaf",
+      "supported_operations": [
+        "build_project_bundle",
+        "open_in_overleaf"
+      ],
+      "unpackaged_operations": [
+        "open_in_overleaf"
+      ]
+    },
+    {
+      "display_name": "PubMed / NCBI E-utilities",
+      "draftable_operations": [
+        "search",
+        "summary",
+        "fetch_abstracts"
+      ],
+      "implementation_status": "live_api",
+      "integration_mode": "rest_api",
+      "notes": "",
+      "operation_workflow_files": {
+        "search": [
+          "wf_ext_pubmed_search.json",
+          "wf_pubmed_search.json"
+        ]
+      },
+      "packaged_operations": [
+        "search"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_pubmed_search.json",
+        "wf_ext_pubmed_search.json"
+      ],
+      "recommended_draft_operation_id": "search",
+      "recommended_import_workflow": "wf_pubmed_search.json",
+      "service_name": "pubmed",
+      "supported_operations": [
+        "search",
+        "summary",
+        "fetch_abstracts"
+      ],
+      "unpackaged_operations": [
+        "summary",
+        "fetch_abstracts"
+      ]
+    },
+    {
+      "display_name": "VS Code",
+      "draftable_operations": [
+        "push_workspace_stub",
+        "emit_tasks_json"
+      ],
+      "implementation_status": "placeholder_bridge",
+      "integration_mode": "local_bridge",
+      "notes": "",
+      "operation_workflow_files": {
+        "push_workspace_stub": [
+          "wf_ext_vscode_push_workspace_stub.json",
+          "wf_vscode_local_bridge.json"
+        ]
+      },
+      "packaged_operations": [
+        "push_workspace_stub"
+      ],
+      "packaged_workflow_count": 2,
+      "packaged_workflows": [
+        "wf_vscode_local_bridge.json",
+        "wf_ext_vscode_push_workspace_stub.json"
+      ],
+      "recommended_draft_operation_id": "push_workspace_stub",
+      "recommended_import_workflow": "wf_vscode_local_bridge.json",
+      "service_name": "vscode",
+      "supported_operations": [
+        "push_workspace_stub",
+        "emit_tasks_json"
+      ],
+      "unpackaged_operations": [
+        "emit_tasks_json"
+      ]
+    }
+  ],
+  "count": 14,
+  "status": "ok"
+}

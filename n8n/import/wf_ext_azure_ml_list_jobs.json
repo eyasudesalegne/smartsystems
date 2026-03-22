@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_azure_ml_list_jobs",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Azure ML::list_jobs. Fill placeholder env vars before execution."
+      },
+      "id": "bf4aca96-df77-578c-9111-b2bfc15a6728",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d20202eb-7b0b-5682-81b3-14ec993325e6",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"azure_ml\",\"display_name\":\"Azure ML\",\"operation_id\":\"list_jobs\",\"method\":\"GET\",\"base_url\":\"{$env.AZURE_ML_BASE_URL}\",\"path\":\"/jobs?api-version=2024-04-01-preview\",\"url\":\"{$env.AZURE_ML_BASE_URL}/jobs?api-version=2024-04-01-preview\",\"headers\":{\"Authorization\":\"Bearer {$env.AZURE_ML_BEARER_TOKEN}\"},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"AZURE_ML_BASE_URL\",\"AZURE_ML_BEARER_TOKEN\",\"AZURE_ML_SUBSCRIPTION_ID\",\"AZURE_ML_RESOURCE_GROUP\",\"AZURE_ML_WORKSPACE\"],\"notes\":\"Workspace jobs, models, and endpoints via Azure ML REST.\"}}];"
+      },
+      "id": "22df4523-1542-5def-8867-b4e35f3f9fdc",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "c4014c42-bc42-51a1-ac17-bdc559cef70c",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ba34d306-39ae-479c-a1ae-946c7faa288b",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "c713af25-1eb7-4d4a-b689-40bfeb0e6c95",
+  "pinData": {},
+  "tags": []
+}

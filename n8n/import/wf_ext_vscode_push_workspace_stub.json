@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_vscode_push_workspace_stub",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for VS Code::push_workspace_stub. Fill placeholder env vars before execution."
+      },
+      "id": "328d5c9d-42f9-5b61-963f-7e1bcea2166a",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "498f15d3-ac4f-5ac4-9412-1260d0d404d2",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"vscode\",\"display_name\":\"VS Code\",\"operation_id\":\"push_workspace_stub\",\"method\":\"POST\",\"base_url\":\"{$env.VSCODE_BRIDGE_URL}\",\"path\":\"/v1/workspace/sync\",\"url\":\"{$env.VSCODE_BRIDGE_URL}/v1/workspace/sync\",\"headers\":{\"Authorization\":\"Bearer {$env.VSCODE_ACCESS_TOKEN}\"},\"body\":{\"workspace_path\":\"__VSCODE_WORKSPACE_PATH__\",\"files\":[]},\"query\":{},\"integration_mode\":\"workspace_bridge\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"VSCODE_BRIDGE_URL\",\"VSCODE_ACCESS_TOKEN\",\"VSCODE_WORKSPACE_PATH\"],\"notes\":\"Workspace file export bridge; keep generated workflow JSON and docs ready for repository or extension-based sync.\"}}];"
+      },
+      "id": "f7950dd9-15d5-5298-9534-2c7c0f35e23e",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "adbd54f7-6a4c-5a40-9a0c-a2b933526b36",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dbe00c06-a666-42b5-ab45-3cb5f8b02bf7",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "6689442f-d23c-4ee3-87ee-8c777bd3ecbc",
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_pubmed_search",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for PubMed::search. Fill placeholder env vars before execution."
+      },
+      "id": "115b4238-6654-592d-a935-740ed4e32c26",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7348a747-93fe-5831-b7bc-6425e8299cb5",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"pubmed\",\"display_name\":\"PubMed\",\"operation_id\":\"search\",\"method\":\"GET\",\"base_url\":\"{$env.PUBMED_BASE_URL}\",\"path\":\"/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&term=__PUBMED_TERM__\",\"url\":\"{$env.PUBMED_BASE_URL}/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&term=__PUBMED_TERM__\",\"headers\":{},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"PUBMED_BASE_URL\",\"PUBMED_EMAIL\",\"PUBMED_API_KEY\"],\"notes\":\"Search PubMed records and retrieve abstracts/metadata.\"}}];"
+      },
+      "id": "2ae3da6c-8be0-5fbf-90cb-44426fe535f5",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "f42e8758-14d9-54a6-8a6f-6d6ead81ff90",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "acb5a9b5-7edb-4472-8bf4-0dd5f6fa45ad",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "ef2109c5-6770-4978-8fbc-7e22cb5540bb",
+  "pinData": {},
+  "tags": []
+}

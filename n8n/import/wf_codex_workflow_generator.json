@@ -1,0 +1,93 @@
+{
+  "name": "wf_codex_workflow_generator",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Generate a workflow draft for a selected connector operation."
+      },
+      "id": "dadd8025-3c6b-43c6-8abd-93bccf0fce00",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -120
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7930d1ab-6a94-48b2-ae58-c9b0020354a2",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{service_name:'pubmed', operation_id:'search'}}];"
+      },
+      "id": "9af12fbe-729e-404f-bde8-da058bb394c2",
+      "name": "Build Draft Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SERVICE_BASE_URL || \"http://service:8000\"}}/connectors/workflow-draft",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {}
+      },
+      "id": "87b27d38-e731-4717-8ccb-6322ce077b02",
+      "name": "Request Workflow Draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -200,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Draft Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Draft Request": {
+      "main": [
+        [
+          {
+            "node": "Request Workflow Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "61ce0f18-1c38-4db1-b02b-5aeadaa14110",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "0daac59c-b6da-4a18-96f6-d5f26fe41bfc",
+  "pinData": {},
+  "tags": []
+}

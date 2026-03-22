@@ -1,0 +1,98 @@
+{
+  "name": "wf_ext_mlflow_list_experiments",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for MLflow::list_experiments. Fill placeholder env vars before execution."
+      },
+      "id": "61983419-7b8f-5de0-9b32-207c5d5e1bde",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ea3f906e-873b-5400-ab5d-b5ef80bf72d6",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"mlflow\",\"display_name\":\"MLflow\",\"operation_id\":\"list_experiments\",\"method\":\"GET\",\"base_url\":\"{$env.MLFLOW_TRACKING_URI}\",\"path\":\"/api/2.0/mlflow/experiments/search\",\"url\":\"{$env.MLFLOW_TRACKING_URI}/api/2.0/mlflow/experiments/search\",\"headers\":{\"Authorization\":\"Bearer {$env.MLFLOW_TOKEN}\"},\"body\":{},\"query\":{},\"integration_mode\":\"api\",\"status\":\"template_ready\",\"credential_placeholders\":[\"MLFLOW_TRACKING_URI\",\"MLFLOW_TOKEN\"],\"notes\":\"Experiment tracking, model registry, and artifact metadata via HTTP.\"}}];"
+      },
+      "id": "1c6c796f-936b-5192-9a6a-cf67d6daa0c8",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={$json.method}",
+        "url": "={{$json.url}}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{$json.headers}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body || {}}}",
+        "options": {}
+      },
+      "id": "56f58c0c-0c15-5659-858f-1fc7bbaa135b",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d1920254-5bfa-42a5-84b0-6f410b9eeb0d",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "cda18ae8-bc6e-49a9-be15-18dd54de16d3",
+  "pinData": {},
+  "tags": []
+}

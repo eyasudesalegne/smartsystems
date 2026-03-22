@@ -1,0 +1,120 @@
+{
+  "name": "wf_ai_task_router",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_ai_task_router previews task-based model + prompt routing via /ai/route and is safe to run before strict auth is enabled."
+      },
+      "id": "12d4d8e4-8436-4f78-871b-ff6980fe0744",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b5e24316-2d57-4a6b-bf8c-afef1a758419",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id: $env.DEFAULT_TENANT_ID || 'default', action_type: 'fallback_chat', generation_mode: 'deterministic', preferred_model: '', fallback_models: []}}];"
+      },
+      "id": "390f7825-6e5d-4416-b383-f91754acffb5",
+      "name": "Build Route Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -470,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ ($env.SERVICE_BASE_URL || 'http://host.docker.internal:8000').replace(/\\/$/, '') + '/ai/route' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "990f92f4-df9d-463a-9e67-ffe7ce622c64",
+      "name": "Route AI Task",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -110,
+        40
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', action_type: body.action_type || 'fallback_chat', selected_model: body.selected_model, fallback_models: body.fallback_models || [], prompt_name: body.prompt_name, prompt_version: body.prompt_version, route_reason: body.route_reason, raw: body}}];"
+      },
+      "id": "9a1c3ff8-4408-4d4b-bda0-c395bae7f58c",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Route Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Route Payload": {
+      "main": [
+        [
+          {
+            "node": "Route AI Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route AI Task": {
+      "main": [
+        [
+          {
+            "node": "Normalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

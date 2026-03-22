@@ -1,0 +1,89 @@
+{
+  "service_name": "google_drive",
+  "display_name": "Google Drive",
+  "category": "documents",
+  "integration_mode": "rest_api",
+  "auth_type": "oauth_refresh_or_bearer",
+  "auth_scheme": "oauth_refresh_or_bearer",
+  "base_url_env": "GOOGLE_DRIVE_BASE_URL",
+  "base_url_placeholder": "{$env.GOOGLE_DRIVE_BASE_URL}",
+  "required_credentials": [
+    "GOOGLE_DRIVE_CLIENT_ID",
+    "GOOGLE_DRIVE_CLIENT_SECRET",
+    "GOOGLE_DRIVE_REFRESH_TOKEN"
+  ],
+  "optional_credentials": [
+    "GOOGLE_DRIVE_ACCESS_TOKEN",
+    "GOOGLE_DRIVE_FOLDER_ID"
+  ],
+  "credential_placeholders": [
+    "GOOGLE_DRIVE_ACCESS_TOKEN",
+    "GOOGLE_DRIVE_BASE_URL",
+    "GOOGLE_DRIVE_CLIENT_ID",
+    "GOOGLE_DRIVE_CLIENT_SECRET",
+    "GOOGLE_DRIVE_FOLDER_ID",
+    "GOOGLE_DRIVE_REFRESH_TOKEN"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "list_files",
+      "method": "GET",
+      "path": "/drive/v3/files?q=__GOOGLE_DRIVE_QUERY__&fields=files(id,name,mimeType,modifiedTime,webViewLink)",
+      "description": "List files matching a Drive query."
+    },
+    {
+      "operation_id": "get_file",
+      "method": "GET",
+      "path": "/drive/v3/files/__GOOGLE_DRIVE_FILE_ID__?fields=id,name,mimeType,modifiedTime,webViewLink,size",
+      "description": "Get file metadata."
+    },
+    {
+      "operation_id": "export_file",
+      "method": "GET",
+      "path": "/drive/v3/files/__GOOGLE_DRIVE_FILE_ID__/export?mimeType=application/pdf",
+      "description": "Export a Google Workspace file as PDF."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "list_files",
+      "method": "GET",
+      "path": "/drive/v3/files?q=__GOOGLE_DRIVE_QUERY__&fields=files(id,name,mimeType,modifiedTime,webViewLink)",
+      "description": "List files matching a Drive query."
+    },
+    {
+      "operation_id": "get_file",
+      "method": "GET",
+      "path": "/drive/v3/files/__GOOGLE_DRIVE_FILE_ID__?fields=id,name,mimeType,modifiedTime,webViewLink,size",
+      "description": "Get file metadata."
+    },
+    {
+      "operation_id": "export_file",
+      "method": "GET",
+      "path": "/drive/v3/files/__GOOGLE_DRIVE_FILE_ID__/export?mimeType=application/pdf",
+      "description": "Export a Google Workspace file as PDF."
+    }
+  ],
+  "input_schema_summary": {
+    "list_files": {
+      "q": "Drive query string"
+    },
+    "get_file": {
+      "file_id": "string"
+    },
+    "export_file": {
+      "file_id": "string",
+      "mimeType": "export MIME type"
+    }
+  },
+  "output_schema_summary": {
+    "files": "array[file metadata]",
+    "file": "file metadata",
+    "content": "binary or exported content"
+  },
+  "rate_limit_retry_notes": "Execution supports either a supplied GOOGLE_DRIVE_ACCESS_TOKEN or refresh-token exchange using GOOGLE_DRIVE_CLIENT_ID, GOOGLE_DRIVE_CLIENT_SECRET, and GOOGLE_DRIVE_REFRESH_TOKEN. Retry 429/5xx with backoff.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "Execution supports either a supplied GOOGLE_DRIVE_ACCESS_TOKEN or refresh-token exchange using GOOGLE_DRIVE_CLIENT_ID, GOOGLE_DRIVE_CLIENT_SECRET, and GOOGLE_DRIVE_REFRESH_TOKEN. Retry 429/5xx with backoff.",
+  "docs_reference": "https://developers.google.com/workspace/drive/api/reference/rest/v3/files/list"
+}

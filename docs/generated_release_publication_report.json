@@ -1,0 +1,23 @@
+{
+  "checksum_valid": true,
+  "generated_artifacts": [
+    "release_manifest.json",
+    "release_checksum_validation.json",
+    "release_preflight_report.json",
+    "release_publication_summary.json"
+  ],
+  "included_files_count": 244,
+  "manifest_checksum": "c6dc853c1f096b773e8b39ce6929a3303f7a41ab45ec326de0b051ec29807138",
+  "next_actions": [
+    "Release publication bundle is ready. Store the package checksum and publish the ZIP through your release channel.",
+    "Keep the rollback bundle and release manifest adjacent to the publication artifact for rollback drills."
+  ],
+  "output_path": "artifacts/release_publication_bundle_default.zip",
+  "package_checksum": "53901d6424bf86d138bd85a7acbb81930c54bbd33a2399a7c3db0c386af74ecc",
+  "preflight_ready": true,
+  "publication_status": "published",
+  "published": true,
+  "release_version": "0.5.0-enterprise-release",
+  "status": "ok",
+  "tenant_id": "default"
+}

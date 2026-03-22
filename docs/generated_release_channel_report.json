@@ -1,0 +1,31 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "release_version": "0.5.0-enterprise-release",
+  "publication_ready": true,
+  "bundle_preview_path": null,
+  "count": 1,
+  "ready_count": 1,
+  "planned_channels": [
+    {
+      "channel_name": "manual_bundle_review",
+      "channel_type": "manual_inspection",
+      "enabled": true,
+      "ready": true,
+      "publication_ready": true,
+      "requires_publication_bundle": true,
+      "destination": "manual_review",
+      "auth_secret_configured": false,
+      "blocking_reasons": [],
+      "recommended_action": "Review the staged publication bundle and promote it through your manual release checklist.",
+      "metadata_json": {
+        "notes": "Default manual review channel for staged release publication bundles.",
+        "release_version": "0.5.0-enterprise-release",
+        "source": "default"
+      }
+    }
+  ],
+  "next_actions": [
+    "At least one release channel is ready. Promote the staged publication bundle using the recommended channel actions."
+  ]
+}

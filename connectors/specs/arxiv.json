@@ -1,0 +1,61 @@
+{
+  "service_name": "arxiv",
+  "display_name": "arXiv",
+  "category": "literature",
+  "integration_mode": "rest_api",
+  "auth_type": "none",
+  "auth_scheme": "none",
+  "base_url_env": "ARXIV_BASE_URL",
+  "base_url_placeholder": "{$env.ARXIV_BASE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "ARXIV_BASE_URL"
+  ],
+  "credential_placeholders": [
+    "ARXIV_BASE_URL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "search",
+      "method": "GET",
+      "path": "/api/query?search_query=all:__ARXIV_QUERY__&start=0&max_results=10",
+      "description": "Search arXiv with Atom feed output."
+    },
+    {
+      "operation_id": "by_id",
+      "method": "GET",
+      "path": "/api/query?id_list=__ARXIV_IDS__",
+      "description": "Fetch one or more arXiv records by id list."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "search",
+      "method": "GET",
+      "path": "/api/query?search_query=all:__ARXIV_QUERY__&start=0&max_results=10",
+      "description": "Search arXiv with Atom feed output."
+    },
+    {
+      "operation_id": "by_id",
+      "method": "GET",
+      "path": "/api/query?id_list=__ARXIV_IDS__",
+      "description": "Fetch one or more arXiv records by id list."
+    }
+  ],
+  "input_schema_summary": {
+    "search": {
+      "search_query": "string"
+    },
+    "by_id": {
+      "id_list": "comma-separated arXiv IDs"
+    }
+  },
+  "output_schema_summary": {
+    "feed": "Atom XML feed"
+  },
+  "rate_limit_retry_notes": "Public API. For bulk sync prefer OAI-PMH rather than the search API.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "Public API. For bulk sync prefer OAI-PMH rather than the search API.",
+  "docs_reference": "https://info.arxiv.org/help/api/user-manual.html"
+}

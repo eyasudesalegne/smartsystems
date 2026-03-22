@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "count": 8,
+  "eligible_total": 0,
+  "report_generated_at": "2026-03-17T16:42:38Z",
+  "policies": [
+    {
+      "resource_type": "ai_route_runs",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "audit_logs",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "connector_execution_log",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "dead_letter_items",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": true,
+      "batch_size": 250,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "document_ingestion_runs",
+      "enabled": true,
+      "retain_days": 90,
+      "archive_before_delete": false,
+      "batch_size": 250,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "queue_backend_events",
+      "enabled": true,
+      "retain_days": 14,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "smoke_test_results",
+      "enabled": true,
+      "retain_days": 14,
+      "archive_before_delete": false,
+      "batch_size": 250,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    },
+    {
+      "resource_type": "workflow_version_events",
+      "enabled": true,
+      "retain_days": 90,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "last_run_at": null,
+      "updated_by": "system_default",
+      "metadata_json": {
+        "seeded": false
+      },
+      "next_action": "monitor"
+    }
+  ],
+  "next_actions": [
+    "Review large eligible_count values before enabling destructive cleanup in production.",
+    "Run /lifecycle/run-cleanup with dry_run=true first, then rerun with dry_run=false when the report is acceptable.",
+    "Archive DLQ rows before delete if dead-letter evidence must be preserved for incident review."
+  ]
+}

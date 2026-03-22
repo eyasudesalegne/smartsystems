@@ -1,0 +1,55 @@
+{
+  "status": "degraded",
+  "tenant_id": "default",
+  "database_available": false,
+  "expected_table_count": 5,
+  "existing_table_count": 0,
+  "all_tables_present": false,
+  "connector_registry_count": null,
+  "execution_log_count": null,
+  "workflow_template_count": null,
+  "smoke_test_count": null,
+  "credential_meta_count": null,
+  "recent_services": [],
+  "next_actions": [
+    "Start PostgreSQL and apply connector migrations before running persistence verification."
+  ],
+  "error": "Database driver not installed or pool not initialized",
+  "tables": [
+    {
+      "table_name": "connector_registry",
+      "exists": false,
+      "row_count": null,
+      "last_validated_at": null,
+      "note": "database unavailable in current runtime"
+    },
+    {
+      "table_name": "connector_credentials_meta",
+      "exists": false,
+      "row_count": null,
+      "last_validated_at": null,
+      "note": "database unavailable in current runtime"
+    },
+    {
+      "table_name": "connector_execution_log",
+      "exists": false,
+      "row_count": null,
+      "last_validated_at": null,
+      "note": "database unavailable in current runtime"
+    },
+    {
+      "table_name": "workflow_templates",
+      "exists": false,
+      "row_count": null,
+      "last_validated_at": null,
+      "note": "database unavailable in current runtime"
+    },
+    {
+      "table_name": "smoke_test_results",
+      "exists": false,
+      "row_count": null,
+      "last_validated_at": null,
+      "note": "database unavailable in current runtime"
+    }
+  ]
+}

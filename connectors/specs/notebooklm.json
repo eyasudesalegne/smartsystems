@@ -1,0 +1,90 @@
+{
+  "service_name": "notebooklm",
+  "display_name": "NotebookLM Enterprise",
+  "category": "research",
+  "integration_mode": "rest_api",
+  "auth_type": "google_bearer",
+  "auth_scheme": "google_bearer",
+  "base_url_env": "NOTEBOOKLM_BASE_URL",
+  "base_url_placeholder": "{$env.NOTEBOOKLM_BASE_URL}",
+  "required_credentials": [
+    "NOTEBOOKLM_BASE_URL",
+    "NOTEBOOKLM_ACCESS_TOKEN"
+  ],
+  "optional_credentials": [
+    "NOTEBOOKLM_PROJECT_NUMBER",
+    "NOTEBOOKLM_LOCATION",
+    "NOTEBOOKLM_NOTEBOOK_ID"
+  ],
+  "credential_placeholders": [
+    "NOTEBOOKLM_ACCESS_TOKEN",
+    "NOTEBOOKLM_BASE_URL",
+    "NOTEBOOKLM_LOCATION",
+    "NOTEBOOKLM_NOTEBOOK_ID",
+    "NOTEBOOKLM_PROJECT_NUMBER"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "create_notebook",
+      "method": "POST",
+      "path": "/v1alpha/projects/__NOTEBOOKLM_PROJECT_NUMBER__/locations/__NOTEBOOKLM_LOCATION__/notebooks",
+      "description": "Create a notebook in NotebookLM Enterprise.",
+      "default_body": {
+        "title": "Imported notebook"
+      }
+    },
+    {
+      "operation_id": "get_notebook",
+      "method": "GET",
+      "path": "/v1alpha/projects/__NOTEBOOKLM_PROJECT_NUMBER__/locations/__NOTEBOOKLM_LOCATION__/notebooks/__NOTEBOOKLM_NOTEBOOK_ID__",
+      "description": "Get one notebook."
+    },
+    {
+      "operation_id": "list_recent",
+      "method": "GET",
+      "path": "/v1alpha/projects/__NOTEBOOKLM_PROJECT_NUMBER__/locations/__NOTEBOOKLM_LOCATION__/notebooks:listRecentlyViewed",
+      "description": "List recently viewed notebooks."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "create_notebook",
+      "method": "POST",
+      "path": "/v1alpha/projects/__NOTEBOOKLM_PROJECT_NUMBER__/locations/__NOTEBOOKLM_LOCATION__/notebooks",
+      "description": "Create a notebook in NotebookLM Enterprise.",
+      "default_body": {
+        "title": "Imported notebook"
+      }
+    },
+    {
+      "operation_id": "get_notebook",
+      "method": "GET",
+      "path": "/v1alpha/projects/__NOTEBOOKLM_PROJECT_NUMBER__/locations/__NOTEBOOKLM_LOCATION__/notebooks/__NOTEBOOKLM_NOTEBOOK_ID__",
+      "description": "Get one notebook."
+    },
+    {
+      "operation_id": "list_recent",
+      "method": "GET",
+      "path": "/v1alpha/projects/__NOTEBOOKLM_PROJECT_NUMBER__/locations/__NOTEBOOKLM_LOCATION__/notebooks:listRecentlyViewed",
+      "description": "List recently viewed notebooks."
+    }
+  ],
+  "input_schema_summary": {
+    "create_notebook": {
+      "title": "string"
+    },
+    "get_notebook": {
+      "notebook_id": "string"
+    },
+    "list_recent": {}
+  },
+  "output_schema_summary": {
+    "notebook": "notebook resource",
+    "recent": "recent notebooks payload"
+  },
+  "rate_limit_retry_notes": "Enterprise-only and currently Preview / Pre-GA. Consumer NotebookLM is not covered by this adapter.",
+  "implementation_status": "partial_api",
+  "status": "partial_api",
+  "notes": "Enterprise-only and currently Preview / Pre-GA. Consumer NotebookLM is not covered by this adapter.",
+  "docs_reference": "https://docs.cloud.google.com/gemini/enterprise/notebooklm-enterprise/docs/api-notebooks"
+}

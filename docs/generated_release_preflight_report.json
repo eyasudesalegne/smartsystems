@@ -1,0 +1,44 @@
+{
+  "checks": {
+    "checksum_validation": {
+      "checksum_algorithm": "sha256",
+      "manifest_checksum": "ec5711f63811af800086d151388a90207bccd2408ad5c89e51f2ad83a426e5dd",
+      "mismatch_count": 0,
+      "mismatched_files": [],
+      "missing_count": 0,
+      "missing_files": [],
+      "next_actions": [
+        "Checksums validated successfully. Proceed to release preflight or deployment."
+      ],
+      "release_version": "0.5.0-enterprise-release",
+      "status": "ok",
+      "tenant_id": "default",
+      "valid": true,
+      "validated_file_count": 209
+    },
+    "import_order": {
+      "entry_count": 57,
+      "missing_entries": [],
+      "ok": true
+    },
+    "migration_files_present": true,
+    "missing_required_files": [],
+    "required_files_present": true,
+    "workflow_files_present": true
+  },
+  "generated_artifacts": [
+    "docs/generated_release_manifest.json",
+    "docs/generated_release_checksum_validation.json",
+    "docs/generated_release_preflight_report.json",
+    "artifacts/release_rollback_bundle_default.zip"
+  ],
+  "migration_count": 13,
+  "next_actions": [
+    "Release preflight passed locally. On a live stack, run persistence smoke and then publish the release."
+  ],
+  "ready": true,
+  "release_version": "0.5.0-enterprise-release",
+  "status": "ok",
+  "tenant_id": "default",
+  "workflow_count": 60
+}

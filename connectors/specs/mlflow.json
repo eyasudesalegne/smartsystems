@@ -1,0 +1,120 @@
+{
+  "service_name": "mlflow",
+  "display_name": "MLflow",
+  "category": "mlops",
+  "integration_mode": "rest_api",
+  "auth_type": "token_or_basic",
+  "auth_scheme": "token_or_basic",
+  "base_url_env": "MLFLOW_TRACKING_URI",
+  "base_url_placeholder": "{$env.MLFLOW_TRACKING_URI}",
+  "required_credentials": [
+    "MLFLOW_TRACKING_URI"
+  ],
+  "optional_credentials": [
+    "MLFLOW_USERNAME",
+    "MLFLOW_PASSWORD",
+    "MLFLOW_TOKEN"
+  ],
+  "credential_placeholders": [
+    "MLFLOW_PASSWORD",
+    "MLFLOW_TOKEN",
+    "MLFLOW_TRACKING_URI",
+    "MLFLOW_USERNAME"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "list_experiments",
+      "method": "POST",
+      "path": "/api/2.0/mlflow/experiments/search",
+      "description": "List experiments from the tracking server.",
+      "query_params": [],
+      "default_body": {
+        "max_results": 25
+      }
+    },
+    {
+      "operation_id": "search_runs",
+      "method": "POST",
+      "path": "/api/2.0/mlflow/runs/search",
+      "description": "Search runs for one or more experiment IDs.",
+      "query_params": [],
+      "default_body": {
+        "experiment_ids": [
+          "__MLFLOW_EXPERIMENT_ID__"
+        ],
+        "max_results": 25
+      }
+    },
+    {
+      "operation_id": "get_run",
+      "method": "GET",
+      "path": "/api/2.0/mlflow/runs/get",
+      "description": "Fetch a specific run.",
+      "query_params": [
+        "run_id"
+      ],
+      "default_query": {
+        "run_id": "__MLFLOW_RUN_ID__"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "list_experiments",
+      "method": "POST",
+      "path": "/api/2.0/mlflow/experiments/search",
+      "description": "List experiments from the tracking server.",
+      "query_params": [],
+      "default_body": {
+        "max_results": 25
+      }
+    },
+    {
+      "operation_id": "search_runs",
+      "method": "POST",
+      "path": "/api/2.0/mlflow/runs/search",
+      "description": "Search runs for one or more experiment IDs.",
+      "query_params": [],
+      "default_body": {
+        "experiment_ids": [
+          "__MLFLOW_EXPERIMENT_ID__"
+        ],
+        "max_results": 25
+      }
+    },
+    {
+      "operation_id": "get_run",
+      "method": "GET",
+      "path": "/api/2.0/mlflow/runs/get",
+      "description": "Fetch a specific run.",
+      "query_params": [
+        "run_id"
+      ],
+      "default_query": {
+        "run_id": "__MLFLOW_RUN_ID__"
+      }
+    }
+  ],
+  "input_schema_summary": {
+    "list_experiments": {
+      "max_results": "integer"
+    },
+    "search_runs": {
+      "experiment_ids": "array[string]",
+      "max_results": "integer"
+    },
+    "get_run": {
+      "run_id": "string query param"
+    }
+  },
+  "output_schema_summary": {
+    "experiments": "array[experiment]",
+    "runs": "array[run]",
+    "run": "run detail object"
+  },
+  "rate_limit_retry_notes": "Retry 429/5xx with exponential backoff. POST bodies must be JSON per MLflow REST API.",
+  "implementation_status": "live_api",
+  "status": "live_api",
+  "notes": "Retry 429/5xx with exponential backoff. POST bodies must be JSON per MLflow REST API.",
+  "docs_reference": "https://mlflow.org/docs/latest/api_reference/rest-api.html"
+}

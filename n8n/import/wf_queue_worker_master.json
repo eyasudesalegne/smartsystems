@@ -1,0 +1,82 @@
+{
+  "name": "wf_queue_worker_master",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SERVICE_BASE_URL || \"http://service:8000\"}}/health",
+        "options": {}
+      },
+      "id": "2",
+      "name": "Service Health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT count(*)::int AS queued FROM queue_items WHERE status IN ('queued','running');"
+      },
+      "id": "3",
+      "name": "Queue Depth",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        740,
+        300
+      ],
+      "credentials": {
+        "postgres": {
+          "name": "__CRED_POSTGRES__"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Service Health",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Service Health": {
+      "main": [
+        [
+          {
+            "node": "Queue Depth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "03bcbf70-d2e4-4e4d-9bc6-7202510edf36",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "925fd125-6e0c-4ebc-be14-628f97694499",
+  "pinData": {},
+  "tags": []
+}

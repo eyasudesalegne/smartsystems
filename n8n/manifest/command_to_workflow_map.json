@@ -1,0 +1,52 @@
+{
+  "/status": "wf_command_router_service_bridge -> /command/execute",
+  "/health": "wf_command_router_service_bridge -> /command/execute",
+  "/jobs": "wf_command_router_service_bridge -> /command/execute",
+  "/logs": "wf_command_router_service_bridge -> /command/execute",
+  "/run": "wf_command_router_service_bridge -> /command/execute",
+  "/compare": "wf_command_router_service_bridge -> /command/execute",
+  "/datasetqa": "wf_command_router_service_bridge -> /command/execute",
+  "/paper": "wf_command_router_service_bridge -> /command/execute",
+  "/today": "wf_command_router_service_bridge -> /command/execute",
+  "/digest": "wf_command_router_service_bridge -> /command/execute",
+  "/note": "wf_command_router_service_bridge -> /command/execute",
+  "/triage": "wf_command_router_service_bridge -> /command/execute",
+  "/remind": "wf_command_router_service_bridge -> /command/execute",
+  "/reminders": "wf_command_router_service_bridge -> /command/execute",
+  "/lead": "wf_command_router_service_bridge -> /command/execute",
+  "/account": "wf_command_router_service_bridge -> /command/execute",
+  "/meetingprep": "wf_command_router_service_bridge -> /command/execute",
+  "/followup": "wf_command_router_service_bridge -> /command/execute",
+  "/deliverables": "wf_command_router_service_bridge -> /command/execute",
+  "/idea": "wf_command_router_service_bridge -> /command/execute",
+  "/draftpost": "wf_command_router_service_bridge -> /command/execute",
+  "/collectassets": "wf_command_router_service_bridge -> /command/execute",
+  "/socialapprovals": "wf_command_router_service_bridge -> /command/execute",
+  "/research": "wf_command_router_service_bridge -> /command/execute",
+  "/methods": "wf_command_router_service_bridge -> /command/execute",
+  "/researchnote": "wf_command_router_service_bridge -> /command/execute",
+  "/manuscript": "wf_command_router_service_bridge -> /command/execute",
+  "/approvals": "wf_command_router_service_bridge -> /command/execute",
+  "/queue": "wf_command_router_service_bridge -> /command/execute",
+  "/dequeue": "wf_command_router_service_bridge -> /command/execute",
+  "/rbac": "wf_command_router_service_bridge -> /command/execute",
+  "/reliability": "wf_command_router_service_bridge -> /command/execute",
+  "/publish": {
+    "workflow": "wf_command_router_service_bridge",
+    "route": "service:/command/execute",
+    "ai_used": false
+  },
+  "/socialstats": {
+    "workflow": "wf_command_router_service_bridge",
+    "route": "service:/command/execute",
+    "ai_used": false
+  },
+  "/publishbundle": {
+    "workflow": "wf_command_router_service_bridge",
+    "route": "service:/command/execute",
+    "ai_used": true
+  },
+  "/connectors": "wf_command_router_service_bridge -> /command/execute",
+  "/connector": "wf_command_router_service_bridge -> /command/execute",
+  "/workflowdraft": "wf_command_router_service_bridge -> /command/execute"
+}

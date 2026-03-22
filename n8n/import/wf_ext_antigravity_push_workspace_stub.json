@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_antigravity_push_workspace_stub",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for Antigravity::push_workspace_stub. Fill placeholder env vars before execution."
+      },
+      "id": "57540759-171a-526c-a099-16da618468dc",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f9964dd9-1e7b-55a5-a858-2110d157e65b",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"antigravity\",\"display_name\":\"Antigravity\",\"operation_id\":\"push_workspace_stub\",\"method\":\"POST\",\"base_url\":\"{$env.ANTIGRAVITY_BASE_URL}\",\"path\":\"/v1/workspaces/__ANTIGRAVITY_WORKSPACE_ID__/sync\",\"url\":\"{$env.ANTIGRAVITY_BASE_URL}/v1/workspaces/__ANTIGRAVITY_WORKSPACE_ID__/sync\",\"headers\":{\"Authorization\":\"Bearer {$env.ANTIGRAVITY_ACCESS_TOKEN}\"},\"body\":{},\"query\":{},\"integration_mode\":\"workspace_bridge\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"ANTIGRAVITY_BASE_URL\",\"ANTIGRAVITY_ACCESS_TOKEN\"],\"notes\":\"Workspace bridge placeholder for agentic IDE handoff.\"}}];"
+      },
+      "id": "a1c624c8-9ec6-5420-87c4-6e728ac2aae9",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "26061dfd-c3e0-55e2-baf4-8ad3edc830ae",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "50f64976-43dc-4dfa-ac1d-b19d6cbbf20e",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "97c84519-2299-4c2f-97e9-2497eb5af1ee",
+  "pinData": {},
+  "tags": []
+}

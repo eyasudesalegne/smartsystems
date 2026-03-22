@@ -1,0 +1,405 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "requested_tenant_id": "default",
+  "effective_tenant_id": "default",
+  "actor_id": "anonymous",
+  "role": "viewer",
+  "identity_tenant_id": "default",
+  "resource_table": "jobs",
+  "action": "read",
+  "decision": "allow",
+  "reason": "same_tenant",
+  "strict_enforcement": false,
+  "policy": {
+    "tenant_id": "default",
+    "resource_table": "jobs",
+    "strict_mode": "inherit",
+    "require_tenant_match": true,
+    "allow_admin_override": true,
+    "allow_service_account_override": true,
+    "allow_global_rows": false,
+    "metadata_json": {
+      "notes": "Job rows should remain tenant-scoped by default.",
+      "source": "default"
+    },
+    "source": "default"
+  },
+  "membership_count": 1,
+  "memberships": [
+    {
+      "tenant_id": "default",
+      "tenant_name": "Default",
+      "actor_id": "anonymous",
+      "role_name": "viewer",
+      "is_default": true,
+      "is_active": true,
+      "created_by": "fallback",
+      "updated_by": "fallback",
+      "metadata_json": {
+        "fallback": true
+      },
+      "created_at": null,
+      "updated_at": null
+    }
+  ],
+  "accessible_tenants": [
+    "default"
+  ],
+  "policy_count": 25,
+  "policies": [
+    {
+      "tenant_id": "default",
+      "resource_table": "audit_logs",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Audit logs should remain tenant-scoped unless an admin override is explicitly permitted.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "connector_credentials_meta",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": false,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Connector credential metadata is tenant-sensitive and should stay isolated.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "connector_execution_log",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Connector execution history is tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "connector_metrics",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Connector runtime metrics are tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "dead_letter_items",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "DLQ rows should remain tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "document_chunks",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "RAG chunk rows remain tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "documents",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "RAG documents remain tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "embedding_versions",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Embedding metadata remains tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "jobs",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Job rows should remain tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "queue_items",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Queue rows should remain tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "release_channel_events",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Release channel planning history remains tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "release_channel_executions",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Release channel execution history remains tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "release_channels",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Release channel configuration remains tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "release_manifests",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Release manifests are tenant-scoped build artifacts.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "release_publication_events",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Publication event history follows the publication tenant scope.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "release_publications",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Release publication history should stay tenant-scoped unless a policy explicitly allows otherwise.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "rollback_packages",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Rollback bundles stay tenant-scoped with the release they protect.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "secrets",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": false,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Secrets remain tenant-bound and should never bleed across tenant boundaries.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "tenant_access_audit",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Tenant access audit rows are scoped to the effective tenant.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "tenant_memberships",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Membership edits must remain tenant-scoped unless an admin override is explicitly permitted.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "tenant_query_scope_audit",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Query-scope audit rows are scoped to the effective tenant.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "tenant_route_policies",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Tenant route policies should be edited only in the target tenant context.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "tenant_row_access_audit",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Row isolation audit rows are scoped to the effective tenant.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "tenant_row_policies",
+      "strict_mode": "enforce",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": false,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Tenant row policies are themselves tenant-scoped security controls.",
+        "source": "default"
+      },
+      "source": "default"
+    },
+    {
+      "tenant_id": "default",
+      "resource_table": "workflow_versions",
+      "strict_mode": "inherit",
+      "require_tenant_match": true,
+      "allow_admin_override": true,
+      "allow_service_account_override": true,
+      "allow_global_rows": false,
+      "metadata_json": {
+        "notes": "Workflow version history is tenant-scoped by default.",
+        "source": "default"
+      },
+      "source": "default"
+    }
+  ],
+  "next_actions": [
+    "Enable STRICT_TENANT_ROW_ISOLATION=true or switch the table policy to enforce when you are ready for harder isolation."
+  ]
+}

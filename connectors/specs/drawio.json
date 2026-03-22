@@ -1,0 +1,87 @@
+{
+  "service_name": "drawio",
+  "display_name": "draw.io / diagrams.net",
+  "category": "diagramming",
+  "integration_mode": "file_bridge",
+  "auth_type": "none",
+  "auth_scheme": "none",
+  "base_url_env": "DRAWIO_BASE_URL",
+  "base_url_placeholder": "{$env.DRAWIO_BASE_URL}",
+  "required_credentials": [],
+  "optional_credentials": [
+    "DRAWIO_BASE_URL",
+    "DRAWIO_ACCESS_TOKEN"
+  ],
+  "credential_placeholders": [
+    "DRAWIO_ACCESS_TOKEN",
+    "DRAWIO_BASE_URL"
+  ],
+  "supported_operations": [
+    {
+      "operation_id": "build_xml_artifact",
+      "method": "LOCAL",
+      "path": "drawio://artifact",
+      "description": "Generate a draw.io-compatible mxfile artifact from nodes and edges.",
+      "default_body": {
+        "title": "Example Diagram",
+        "nodes": [
+          {
+            "id": "start",
+            "label": "Start"
+          }
+        ],
+        "edges": []
+      }
+    },
+    {
+      "operation_id": "emit_embed_link",
+      "method": "LOCAL",
+      "path": "drawio://embed",
+      "description": "Create an embed-mode handoff payload for diagrams.net."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "build_xml_artifact",
+      "method": "LOCAL",
+      "path": "drawio://artifact",
+      "description": "Generate a draw.io-compatible mxfile artifact from nodes and edges.",
+      "default_body": {
+        "title": "Example Diagram",
+        "nodes": [
+          {
+            "id": "start",
+            "label": "Start"
+          }
+        ],
+        "edges": []
+      }
+    },
+    {
+      "operation_id": "emit_embed_link",
+      "method": "LOCAL",
+      "path": "drawio://embed",
+      "description": "Create an embed-mode handoff payload for diagrams.net."
+    }
+  ],
+  "input_schema_summary": {
+    "build_xml_artifact": {
+      "title": "string",
+      "nodes": "array[node]",
+      "edges": "array[edge]"
+    },
+    "emit_embed_link": {
+      "diagram_name": "string",
+      "artifact_path": "string"
+    }
+  },
+  "output_schema_summary": {
+    "artifact_path": "filesystem path to .drawio XML",
+    "embed_payload": "JSON handoff payload"
+  },
+  "rate_limit_retry_notes": "No direct vendor REST call in this package. Use generated XML with app.diagrams.net or embed.diagrams.net.",
+  "implementation_status": "placeholder_bridge",
+  "status": "placeholder_bridge",
+  "notes": "No direct vendor REST call in this package. Use generated XML with app.diagrams.net or embed.diagrams.net.",
+  "docs_reference": "https://www.drawio.com/doc/faq/embed-mode"
+}

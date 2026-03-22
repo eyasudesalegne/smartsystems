@@ -1,0 +1,120 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "dry_run": true,
+  "count": 8,
+  "eligible_total": 0,
+  "archived_total": 0,
+  "deleted_total": 0,
+  "items": [
+    {
+      "resource_type": "ai_route_runs",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "audit_logs",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "connector_execution_log",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "dead_letter_items",
+      "enabled": true,
+      "retain_days": 30,
+      "archive_before_delete": true,
+      "batch_size": 250,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "document_ingestion_runs",
+      "enabled": true,
+      "retain_days": 90,
+      "archive_before_delete": false,
+      "batch_size": 250,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "queue_backend_events",
+      "enabled": true,
+      "retain_days": 14,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "smoke_test_results",
+      "enabled": true,
+      "retain_days": 14,
+      "archive_before_delete": false,
+      "batch_size": 250,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    },
+    {
+      "resource_type": "workflow_version_events",
+      "enabled": true,
+      "retain_days": 90,
+      "archive_before_delete": false,
+      "batch_size": 500,
+      "total_count": 0,
+      "eligible_count": 0,
+      "archived_count": 0,
+      "deleted_count": 0,
+      "dry_run": true,
+      "last_run_at": null
+    }
+  ],
+  "next_actions": [
+    "Inspect archived_total and deleted_total before increasing batch sizes.",
+    "Keep dead-letter archiving enabled for incident-heavy environments so failures remain reviewable.",
+    "Schedule wf_data_lifecycle_cleanup only after the dry-run report is stable for the tenant."
+  ]
+}

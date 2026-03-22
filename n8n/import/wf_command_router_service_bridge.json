@@ -1,0 +1,56 @@
+{
+  "name": "wf_command_router_service_bridge",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SERVICE_BASE_URL || \"http://service:8000\"}}/command/execute",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {}
+      },
+      "id": "2",
+      "name": "Call Companion Command",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        280
+      ]
+    }
+  ],
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Call Companion Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "b7829f29-e2f4-4775-bc71-64054a98ee8f",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "40343a09-82de-4da7-b9b3-2d6261f1d722",
+  "pinData": {},
+  "tags": []
+}

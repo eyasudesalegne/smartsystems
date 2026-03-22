@@ -1,0 +1,22 @@
+[
+  {
+    "text": "hello from webhook",
+    "tenant_id": "default",
+    "actor_id": "web-user-1"
+  },
+  {
+    "text": "/note remember phase1 import order",
+    "tenant_id": "default",
+    "actor_id": "web-user-1"
+  },
+  {
+    "text": "/remind review queue foundation | 2030-01-01T09:00:00Z",
+    "tenant_id": "default",
+    "actor_id": "web-user-1"
+  },
+  {
+    "text": "/researchnote lexical retrieval starts in phase1",
+    "tenant_id": "default",
+    "actor_id": "web-user-1"
+  }
+]

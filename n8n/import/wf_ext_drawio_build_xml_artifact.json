@@ -1,0 +1,90 @@
+{
+  "name": "wf_ext_drawio_build_xml_artifact",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Connector template for draw.io::build_xml_artifact. Fill placeholder env vars before execution."
+      },
+      "id": "6ec62d46-60b0-5436-8e23-c2f8a1f512ef",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d457d603-6c87-5cae-ae19-68e3225ff710",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\"service_name\":\"drawio\",\"display_name\":\"draw.io\",\"operation_id\":\"build_xml_artifact\",\"method\":\"LOCAL\",\"base_url\":\"{$env.DRAWIO_BASE_URL}\",\"path\":\"drawio://artifact\",\"url\":\"{$env.DRAWIO_BASE_URL}drawio://artifact\",\"headers\":{},\"body\":{},\"query\":{},\"integration_mode\":\"artifact\",\"status\":\"placeholder_only\",\"credential_placeholders\":[\"DRAWIO_BASE_URL\"],\"notes\":\"Generates and stores draw.io-compatible XML/CSV artifacts for later import.\"}}];"
+      },
+      "id": "72991c4b-cadf-535b-bfd2-d2770e01a640",
+      "name": "Build Request Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{status:'placeholder_only', service:$json.service_name, operation:$json.operation_id, integration_mode:$json.integration_mode, body:$json.body, notes:$json.notes}}];"
+      },
+      "id": "fda97182-bbff-5890-84c0-563370f69eb7",
+      "name": "Placeholder Artifact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Request Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request Payload": {
+      "main": [
+        [
+          {
+            "node": "Placeholder Artifact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "366fbcbd-5532-4d08-bf70-1441f2500d23",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "f47682a5-84b6-44e2-b000-304e22de89b2",
+  "pinData": {},
+  "tags": []
+}

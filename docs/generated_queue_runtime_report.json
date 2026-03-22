@@ -1,0 +1,26 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "summary": {
+    "queue_depth": 0,
+    "dlq_size": 0,
+    "retrying": 0,
+    "highest_priority_waiting": 0,
+    "requested_queue_backend": "db",
+    "queue_backend": "db",
+    "worker_concurrency": 4,
+    "retry_backoff_base_seconds": 15,
+    "retry_backoff_max_seconds": 1800,
+    "retry_backoff_jitter_seconds": 5,
+    "lease_seconds": 180,
+    "queue_max_claim_batch": 16,
+    "redis_url_configured": true,
+    "backend_health": {
+      "backend": "db",
+      "available": true,
+      "details": "db queue available"
+    },
+    "backend_fallback_reason": null,
+    "active_workers": 1
+  }
+}

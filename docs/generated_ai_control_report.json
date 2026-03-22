@@ -1,0 +1,150 @@
+{
+  "status": "ok",
+  "tenant_id": "default",
+  "model_count": 2,
+  "prompt_count": 3,
+  "models": [
+    {
+      "name": "gemma3",
+      "type": "local",
+      "capabilities": [
+        "chat",
+        "text_generation",
+        "fallback_chat",
+        "summarize",
+        "retrieve_answer"
+      ],
+      "latency_profile": "medium",
+      "metadata_json": {
+        "default": true,
+        "modes": [
+          "deterministic",
+          "creative"
+        ],
+        "fallback_models": []
+      }
+    },
+    {
+      "name": "embeddinggemma",
+      "type": "local",
+      "capabilities": [
+        "embeddings",
+        "retrieval"
+      ],
+      "latency_profile": "fast",
+      "metadata_json": {
+        "default": true,
+        "modes": [
+          "deterministic"
+        ]
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "fallback_chat",
+      "version": "phase3.v1",
+      "mode": "deterministic",
+      "model_compatibility": [
+        "gemma3"
+      ]
+    },
+    {
+      "name": "summarize",
+      "version": "phase3.summary.v1",
+      "mode": "deterministic",
+      "model_compatibility": [
+        "gemma3"
+      ]
+    },
+    {
+      "name": "retrieve_answer",
+      "version": "phase3.retrieve.v1",
+      "mode": "deterministic",
+      "model_compatibility": [
+        "gemma3"
+      ]
+    }
+  ],
+  "route_samples": [
+    {
+      "tenant_id": "default",
+      "action_type": "fallback_chat",
+      "generation_mode": "deterministic",
+      "selected_model": "gemma3",
+      "fallback_models": [],
+      "attempted_models": [
+        "gemma3"
+      ],
+      "prompt_name": "fallback_chat",
+      "prompt_version": "phase3.v1",
+      "prompt_template": "You are a grounded local assistant. Use provided context when available. If evidence is weak, say so plainly.",
+      "prompt_mode": "deterministic",
+      "route_reason": "prompt_model_compatibility",
+      "source": "fallback",
+      "available_models": [
+        "gemma3",
+        "embeddinggemma"
+      ],
+      "available_prompts": [
+        "fallback_chat:phase3.v1",
+        "summarize:phase3.summary.v1",
+        "retrieve_answer:phase3.retrieve.v1"
+      ]
+    },
+    {
+      "tenant_id": "default",
+      "action_type": "summarize",
+      "generation_mode": "deterministic",
+      "selected_model": "gemma3",
+      "fallback_models": [],
+      "attempted_models": [
+        "gemma3"
+      ],
+      "prompt_name": "summarize",
+      "prompt_version": "phase3.summary.v1",
+      "prompt_template": "Summarize the provided content faithfully. Preserve important constraints and cite source references when present.",
+      "prompt_mode": "deterministic",
+      "route_reason": "prompt_model_compatibility",
+      "source": "fallback",
+      "available_models": [
+        "gemma3",
+        "embeddinggemma"
+      ],
+      "available_prompts": [
+        "fallback_chat:phase3.v1",
+        "summarize:phase3.summary.v1",
+        "retrieve_answer:phase3.retrieve.v1"
+      ]
+    },
+    {
+      "tenant_id": "default",
+      "action_type": "retrieve_answer",
+      "generation_mode": "deterministic",
+      "selected_model": "gemma3",
+      "fallback_models": [],
+      "attempted_models": [
+        "gemma3"
+      ],
+      "prompt_name": "retrieve_answer",
+      "prompt_version": "phase3.retrieve.v1",
+      "prompt_template": "Answer using the provided evidence. Include source references from the context when available. If evidence is weak, say so plainly.",
+      "prompt_mode": "deterministic",
+      "route_reason": "prompt_model_compatibility",
+      "source": "fallback",
+      "available_models": [
+        "gemma3",
+        "embeddinggemma"
+      ],
+      "available_prompts": [
+        "fallback_chat:phase3.v1",
+        "summarize:phase3.summary.v1",
+        "retrieve_answer:phase3.retrieve.v1"
+      ]
+    }
+  ],
+  "next_actions": [
+    "Register additional models or prompt versions if you need task-specific routing beyond the seeded local Ollama defaults.",
+    "Run /ai/route for each production action type before enabling strict auth so model/prompt selection is visible to operators."
+  ]
+}

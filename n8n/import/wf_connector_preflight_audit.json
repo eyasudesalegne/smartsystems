@@ -1,0 +1,81 @@
+{
+  "name": "wf_connector_preflight_audit",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "wf_connector_preflight_audit backend bridge workflow. Use this before live execution to see which connectors are configured, which are live-ready, and which still need credentials."
+      },
+      "id": "f49ce4d1-bc8a-5c90-9d2e-4d588ca5a4cb",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-820, -140]
+    },
+    {
+      "parameters": {},
+      "id": "7cc6f4b8-0fa4-5167-b81f-e6b09a983b6b",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-780, 40]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{tenant_id: 'default', service_names: [], persist: true}}];"
+      },
+      "id": "8f72f50a-c61d-5643-ad1c-13669354db95",
+      "name": "Build Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-460, 40]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{($env.SERVICE_BASE_URL || \"http://host.docker.internal:8000\").replace(/\\/$/, \"\") + \"/connectors/preflight\"}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "f7eaa749-c1ce-5681-81c7-eb520f7e5c5b",
+      "name": "Backend Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-120, 40],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json; return [{json:{status: body.status || 'ok', tenant_id: body.tenant_id || 'default', count: body.count || 0, configured_count: body.configured_count || 0, live_ready_count: body.live_ready_count || 0, connectors: body.connectors || []}}];"
+      },
+      "id": "b1796b86-7066-58e3-b912-5592569d5f0e",
+      "name": "Normalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 40]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [[{"node": "Build Payload", "type": "main", "index": 0}]]
+    },
+    "Build Payload": {
+      "main": [[{"node": "Backend Request", "type": "main", "index": 0}]]
+    },
+    "Backend Request": {
+      "main": [[{"node": "Normalize Response", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
